@@ -1,3 +1,4 @@
+import { RecaptchaGuard } from "@guards/recaptcha.guard";
 import {
   Body,
   Controller,
@@ -5,6 +6,7 @@ import {
   Post,
   Req,
   UnauthorizedException,
+  UseGuards,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiTags } from "@nestjs/swagger";
@@ -36,11 +38,13 @@ export class AuthController {
   }
 
   @Post("sign-up")
+  @UseGuards(RecaptchaGuard)
   public async signUp(@Body() body: SignUpDto) {
     return await this.signUpService.execute(body);
   }
 
   @Post("sign-in")
+  @UseGuards(RecaptchaGuard)
   public async signIn(@Req() request: Request, @Body() body: SignInDto) {
     const tokens = await this.signInService.execute(body);
     const { refreshToken, ...rest } = tokens;

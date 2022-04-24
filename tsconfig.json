@@ -20,6 +20,7 @@
     "paths": {
       "@entities/*": ["./src/domain/entities/*"],
       "@generics/*": ["./src/shared/generics/*"],
+      "@guards/*": ["./src/shared/guards/*"],
       "@services/*": ["./src/shared/services/*"]
     }
   }
