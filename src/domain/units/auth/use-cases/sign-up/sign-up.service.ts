@@ -1,4 +1,4 @@
-import { EntityRepository } from "@mikro-orm/core";
+import { EntityRepository } from "@mikro-orm/mongodb";
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { User } from "@entities/user.entity";
 import { SignUpDto } from "./sign-up.dto";

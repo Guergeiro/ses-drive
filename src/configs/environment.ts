@@ -1,4 +1,6 @@
 import { ConfigObject } from "@nestjs/config";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 const NODE_ENV = process.env.NODE_ENV || "development";
 
@@ -14,12 +16,34 @@ export async function environment() {
   }
 
   env["NODE_ENV"] = NODE_ENV;
+  env["auth"] = auth();
   env["database"] = database();
-  env["host"] = host();
+  env["host"] = await host();
   env["ratelimiter"] = ratelimiter();
   env["recaptcha"] = recaptcha();
 
   return env;
+}
+
+async function version() {
+  const packageJson = join(process.cwd(), "package.json");
+  const { version } = JSON.parse(await readFile(packageJson, "utf8")) as Record<
+    string,
+    string
+  >;
+  const [major, ..._rest] = version.split(".");
+  return major;
+}
+
+function auth() {
+  return {
+    JWT_SECRET: process.env.JWT_SECRET || NODE_ENV,
+    // Default 5min
+    JWT_ACCESS_EXPIRY_TIME: parseInt(process.env.JWT_ACCESS_EXPIRY_TIME) || 300,
+    // Default 1week
+    JWT_REFRESH_EXPIRY_TIME:
+      parseInt(process.env.JWT_REFRESH_EXPIRY_TIME) || 604800,
+  };
 }
 
 function database() {
@@ -31,10 +55,13 @@ function database() {
   };
 }
 
-function host() {
+async function host() {
+  const v = await version();
   return {
     URL: process.env.URL || "0.0.0.0",
     PORT: parseInt(process.env.PORT) || 3000,
+    VERSION: v,
+    PREFIX: `api/v${v}`,
   };
 }
 

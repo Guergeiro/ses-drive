@@ -16,9 +16,8 @@ async function bootstrap() {
         : ["error", "warn", "log", "debug", "verbose"],
   });
 
-  app.setGlobalPrefix(`/api/`);
+  app.setGlobalPrefix(env["host"]["PREFIX"]);
   app.enableShutdownHooks();
-  app.enableVersioning();
   app.enableCors({ credentials: true, origin: "*" });
   app.useGlobalPipes(
     new ValidationPipe({
@@ -31,6 +30,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle("Backend")
+    .setVersion(env["host"]["VERSION"])
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);

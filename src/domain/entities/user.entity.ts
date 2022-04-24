@@ -1,27 +1,32 @@
 import {
   Collection,
   Entity,
-  EventArgs,
   OneToMany,
   Property,
-  BeforeCreate,
-  BeforeUpdate,
+  Unique,
 } from "@mikro-orm/core";
-import { genSalt, hash } from "bcrypt";
 import { BaseEntity } from "./base.entity";
 import { File } from "./file.entity";
+import { Token } from "./token.entity";
 
 @Entity()
 export class User extends BaseEntity {
   @Property()
+  @Unique()
   email!: string;
 
-  @Property()
+  @Property({ hidden: true })
   password!: string;
 
-  @Property()
+  @Property({ hidden: true })
   tokenVersion = 1;
 
-  @OneToMany(() => File, (file) => file.owner)
+  @OneToMany(() => File, (file) => file.owner, { orphanRemoval: true })
   files = new Collection<File>(this);
+
+  @OneToMany(() => Token, (token) => token.user, {
+    orphanRemoval: true,
+    hidden: true,
+  })
+  tokens = new Collection<Token>(this);
 }
