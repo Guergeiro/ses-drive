@@ -8,6 +8,7 @@ import { SharedModule } from "./shared/shared.module";
 import { DomainModule } from "./domain/domain.module";
 import { MikroOrmModule } from "@mikro-orm/nestjs";
 import { MikroOrmConfigService } from "./configs/MikroOrmConfigService";
+import { ScheduleModule } from "@nestjs/schedule";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MikroOrmConfigService } from "./configs/MikroOrmConfigService";
       useClass: MikroOrmConfigService,
       inject: [ConfigService],
     }),
+    ScheduleModule.forRoot(),
     SharedModule,
     DomainModule,
   ],

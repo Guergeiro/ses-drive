@@ -4,15 +4,19 @@ import { User } from "@entities/user.entity";
 import { SignUpDto } from "./sign-up.dto";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { genSalt, hash } from "bcrypt";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class SignUpService {
   private readonly userRepository: EntityRepository<User>;
+  private readonly configService: ConfigService;
 
   public constructor(
     @InjectRepository(User) userRepository: EntityRepository<User>,
+    configService: ConfigService,
   ) {
     this.userRepository = userRepository;
+    this.configService = configService;
   }
 
   public async execute({ email, password }: SignUpDto) {
@@ -23,7 +27,7 @@ export class SignUpService {
 
     const user = this.userRepository.create({
       email: email,
-      password: password,
+      password: `${password}:${this.configService.get<string>("auth.PEPPER")}`,
     });
 
     const salt = await genSalt(10);

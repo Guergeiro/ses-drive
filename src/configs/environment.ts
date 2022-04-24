@@ -32,11 +32,12 @@ async function version() {
     string
   >;
   const [major, ..._rest] = version.split(".");
-  return major;
+  return parseInt(major);
 }
 
 function auth() {
   return {
+    PEPPER: process.env.PEPPER || NODE_ENV,
     JWT_SECRET: process.env.JWT_SECRET || NODE_ENV,
     // Default 5min
     JWT_ACCESS_EXPIRY_TIME: parseInt(process.env.JWT_ACCESS_EXPIRY_TIME) || 300,

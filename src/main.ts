@@ -30,7 +30,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle("Backend")
-    .setVersion(env["host"]["VERSION"])
+    .setVersion(`${env["host"]["VERSION"]}`)
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);

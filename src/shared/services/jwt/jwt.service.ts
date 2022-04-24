@@ -26,7 +26,7 @@ export class JwtService {
     this.jwt = jwt;
   }
 
-  public async generateAcessToken({ id, tokenVersion }: User) {
+  public async generateAccessToken({ id, tokenVersion }: User) {
     return await this.generateToken(
       { id: id, tokenVersion: tokenVersion },
       this.configService.get<number>("auth.JWT_ACCESS_EXPIRY_TIME"),

@@ -9,7 +9,7 @@ import { BaseEntity } from "./base.entity";
 import { File } from "./file.entity";
 import { Token } from "./token.entity";
 
-@Entity()
+@Entity({ tableName: "users" })
 export class User extends BaseEntity {
   @Property()
   @Unique()
