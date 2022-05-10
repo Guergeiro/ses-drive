@@ -17,6 +17,7 @@ export async function environment() {
 
   env["NODE_ENV"] = NODE_ENV;
   env["auth"] = auth();
+  env["aws"] = aws();
   env["database"] = database();
   env["host"] = await host();
   env["ratelimiter"] = ratelimiter();
@@ -44,6 +45,18 @@ function auth() {
     // Default 1week
     JWT_REFRESH_EXPIRY_TIME:
       parseInt(process.env.JWT_REFRESH_EXPIRY_TIME) || 604800,
+    JWT_REFRESH_TIMEOUT_LOWER_BOUND:
+      parseInt(process.env.JWT_REFRESH_TIMEOUT_LOWER_BOUND) || 1000,
+    JWT_REFRESH_TIMEOUT_UPPER_BOUND:
+      parseInt(process.env.JWT_REFRESH_TIMEOUT_UPPER_BOUND) || 2000,
+  };
+}
+
+function aws() {
+  return {
+    ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY,
+    SECRET_KEY: process.env.AWS_SECRET_KEY,
+    REGION: process.env.AWS_REGION,
   };
 }
 

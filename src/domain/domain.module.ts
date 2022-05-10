@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { FileModule } from "./units/file/file.module";
+import { FilesModule } from "./units/files/files.module";
 import { AuthModule } from "./units/auth/auth.module";
 
 @Module({
-  imports: [FileModule, AuthModule],
+  imports: [FilesModule, AuthModule],
 })
 export class DomainModule {}

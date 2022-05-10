@@ -1,6 +1,7 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as cookieParser from "cookie-parser";
 import helmet from "helmet";
 import "reflect-metadata";
 import { AppModule } from "./app.module";
@@ -19,14 +20,15 @@ async function bootstrap() {
   app.setGlobalPrefix(env["host"]["PREFIX"]);
   app.enableShutdownHooks();
   app.enableCors({ credentials: true, origin: "*" });
+
+  app.use(helmet());
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
       whitelist: true,
     }),
   );
-
-  app.use(helmet());
 
   const config = new DocumentBuilder()
     .setTitle("Backend")

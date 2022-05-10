@@ -17,7 +17,7 @@ export class SignOutService {
     this.jwtService = jwtService;
   }
 
-  public async execute(tokenString: string) {
+  public async execute(tokenString?: string) {
     const user = await this.jwtService.validateToken(tokenString);
 
     if (user == null) {

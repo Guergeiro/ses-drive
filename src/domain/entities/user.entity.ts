@@ -5,6 +5,7 @@ import {
   Property,
   Unique,
 } from "@mikro-orm/core";
+import { randomBytes } from "crypto";
 import { BaseEntity } from "./base.entity";
 import { File } from "./file.entity";
 import { Token } from "./token.entity";
@@ -14,6 +15,9 @@ export class User extends BaseEntity {
   @Property()
   @Unique()
   email!: string;
+
+  @Property()
+  apiToken = randomBytes(20).toString("hex");
 
   @Property({ hidden: true })
   password!: string;

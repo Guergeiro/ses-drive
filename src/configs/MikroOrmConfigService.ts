@@ -3,7 +3,7 @@ import {
   MikroOrmModuleOptions,
 } from "@mikro-orm/nestjs";
 import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()
@@ -20,8 +20,6 @@ export class MikroOrmConfigService implements MikroOrmOptionsFactory {
     const password = this.configService.get<string>("database.PASSWORD");
     const dbName = this.configService.get<string>("database.NAME");
 
-    console.log(user, password, dbName);
-
     return {
       type: "mongo",
       clientUrl: `mongodb+srv://${host}?retryWrites=true&w=majority`,
@@ -34,6 +32,12 @@ export class MikroOrmConfigService implements MikroOrmOptionsFactory {
       metadataProvider: TsMorphMetadataProvider,
       implicitTransactions: true,
       ensureIndexes: true,
+      forceUtcTimezone: true,
+      findOneOrFailHandler: function (entityName) {
+        return new NotFoundException(`${entityName} not found`);
+      },
+      forceEntityConstructor: true,
+      forceUndefined: true,
     };
   }
 }

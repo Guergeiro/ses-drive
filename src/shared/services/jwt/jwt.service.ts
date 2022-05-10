@@ -6,6 +6,7 @@ import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService as Jwt } from "@nestjs/jwt";
+import { AwsS3Service } from "@services/aws-s3/aws-s3.service";
 
 @Injectable()
 export class JwtService {
@@ -13,20 +14,25 @@ export class JwtService {
   private readonly tokenRepository: EntityRepository<Token>;
   private readonly configService: ConfigService;
   private readonly jwt: Jwt;
+  private readonly awsS3Service: AwsS3Service;
 
   public constructor(
     @InjectRepository(User) userRepository: EntityRepository<User>,
     @InjectRepository(Token) tokenRepository: EntityRepository<Token>,
     configService: ConfigService,
     jwt: Jwt,
+    awsS3Service: AwsS3Service,
   ) {
     this.userRepository = userRepository;
     this.tokenRepository = tokenRepository;
     this.configService = configService;
     this.jwt = jwt;
+    this.awsS3Service = awsS3Service;
   }
 
   public async generateAccessToken({ id, tokenVersion }: User) {
+    console.log(await this.awsS3Service.listFiles());
+
     return await this.generateToken(
       { id: id, tokenVersion: tokenVersion },
       this.configService.get<number>("auth.JWT_ACCESS_EXPIRY_TIME"),
@@ -57,8 +63,12 @@ export class JwtService {
     return { refresh_token, expiresAt };
   }
 
-  public async validateToken(tokenString: string) {
+  public async validateToken(tokenString?: string) {
     try {
+      if (tokenString == null) {
+        return null;
+      }
+
       const decodedString = Buffer.from(tokenString, "base64url").toString(
         "utf8",
       );

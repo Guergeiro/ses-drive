@@ -24,7 +24,6 @@ function copyHooks(hooksDirectory) {
 }
 
 exec("git rev-parse --git-path hooks", function (err, stdout) {
-  console.log(basename(__filename));
   const hooksDirectory = join(process.cwd(), handleSysCall(err, stdout));
   copyHooks(hooksDirectory);
 });

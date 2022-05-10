@@ -1,11 +1,7 @@
 import { User } from "@entities/user.entity";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@services/jwt/jwt.service";
 import { compare } from "bcrypt";
@@ -28,12 +24,9 @@ export class SignInService {
   }
 
   public async execute({ email, password }: SignInDto) {
-    const user = await this.userRepository.findOne({
+    const user = await this.userRepository.findOneOrFail({
       email: email,
     });
-    if (user == null) {
-      throw new NotFoundException();
-    }
 
     const passwordToCompare = `${password}:${this.configService.get<string>(
       "auth.PEPPER",

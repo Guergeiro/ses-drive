@@ -5,6 +5,9 @@ import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { JwtService } from "./jwt/jwt.service";
+import { AwsS3Service } from "./aws-s3/aws-s3.service";
+import { MimeTypesService } from "./mime-types/mime-types.service";
+import { HttpModule } from "@nestjs/axios";
 
 @Module({
   imports: [
@@ -15,8 +18,14 @@ import { JwtService } from "./jwt/jwt.service";
       }),
       inject: [ConfigService],
     }),
+    HttpModule.registerAsync({
+      useFactory: async () => ({
+        timeout: 5000,
+      }),
+      inject: [ConfigService],
+    }),
   ],
-  providers: [JwtService],
-  exports: [JwtService],
+  providers: [JwtService, AwsS3Service, MimeTypesService],
+  exports: [JwtService, AwsS3Service, MimeTypesService],
 })
 export class ServicesModule {}
