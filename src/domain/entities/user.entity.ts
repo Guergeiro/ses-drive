@@ -17,7 +17,7 @@ export class User extends BaseEntity {
   email!: string;
 
   @Property()
-  apiToken = randomBytes(20).toString("hex");
+  apiKey = randomBytes(20).toString("hex");
 
   @Property({ hidden: true })
   password!: string;

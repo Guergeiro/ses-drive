@@ -1,4 +1,5 @@
 import { S3, S3ClientConfig } from "@aws-sdk/client-s3";
+import { File } from "@entities/file.entity";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
@@ -26,7 +27,20 @@ export class AwsS3Service {
     this.client = new S3(s3Config);
   }
 
-  public async listFiles() {
+  public createFiles(
+    files: Array<{ fileObj: File; buffer: Buffer; type: string }>,
+  ) {
+    const promises = files.map(({ fileObj, buffer, type }) => {
+      return this.client.putObject({
+        Body: buffer,
+        Bucket: type,
+        Key: fileObj.name,
+      });
+    });
+    return Promise.allSettled(promises);
+  }
+
+  public async listFiles(path: string) {
     const response = await this.client.createBucket({
       Bucket: "sup",
       ACL: "private",

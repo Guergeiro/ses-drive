@@ -22,7 +22,7 @@ export class MikroOrmConfigService implements MikroOrmOptionsFactory {
 
     return {
       type: "mongo",
-      clientUrl: `mongodb+srv://${host}?retryWrites=true&w=majority`,
+      clientUrl: `${host}?retryWrites=true&w=majority`,
       user: user,
       password: password,
       dbName: dbName,
@@ -38,6 +38,8 @@ export class MikroOrmConfigService implements MikroOrmOptionsFactory {
       },
       forceEntityConstructor: true,
       forceUndefined: true,
+      validate: true,
+      strict: true,
     };
   }
 }

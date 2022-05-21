@@ -1,4 +1,7 @@
+import { User } from "@entities/user.entity";
+import { UserDecorator } from "@generics/User.decorator";
 import { RecaptchaGuard } from "@guards/recaptcha.guard";
+import { RefreshJwtAuthGuard } from "@guards/refresh-jwt.guard";
 import {
   Body,
   Controller,
@@ -19,9 +22,10 @@ import { SignOutService } from "./use-cases/sign-out/sign-out.service";
 import { SignUpDto } from "./use-cases/sign-up/sign-up.dto";
 import { SignUpService } from "./use-cases/sign-up/sign-up.service";
 
-@ApiTags("auth")
+@ApiTags("authentication")
 @Controller("auth")
 export class AuthController {
+  private readonly refreshPaths = ["refresh", "sign-out"];
   private readonly configService: ConfigService;
   private readonly signUpService: SignUpService;
   private readonly signInService: SignInService;
@@ -72,11 +76,10 @@ export class AuthController {
   }
 
   @Get("refresh")
-  public async refresh(@Req() request: Request) {
+  @UseGuards(RefreshJwtAuthGuard)
+  public async refresh(@Req() request: Request, @UserDecorator() user: User) {
     try {
-      const tokens = await this.refreshService.execute(
-        request.cookies["refresh_token"],
-      );
+      const tokens = await this.refreshService.execute(user);
 
       const { refreshToken, ...rest } = tokens;
 
@@ -103,17 +106,23 @@ export class AuthController {
   ) {
     const cookie = {
       httpOnly: true,
-      expiresAt: expiresAt.toUTCString(),
+      expires: expiresAt,
       secure: this.configService.get<string>("NODE_ENV") !== "development",
     };
 
-    request.res.cookie("refresh_token", refreshToken, {
-      ...cookie,
-      path: `/${this.configService.get<string>("host.PREFIX")}/auth/refresh`,
-    });
+    for (const path of this.refreshPaths) {
+      request.res.cookie("refresh_token", refreshToken, {
+        ...cookie,
+        path: `/${this.configService.get<string>("host.PREFIX")}/auth/${path}`,
+      });
+    }
   }
 
   private clearResponseRefreshToken(request: Request) {
-    request.res.clearCookie("refresh_token");
+    for (const path of this.refreshPaths) {
+      request.res.clearCookie("refresh_token", {
+        path: `/${this.configService.get<string>("host.PREFIX")}/auth/${path}`,
+      });
+    }
   }
 }

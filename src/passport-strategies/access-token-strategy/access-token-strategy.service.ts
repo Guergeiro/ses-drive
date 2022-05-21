@@ -9,7 +9,10 @@ import { Request } from "express";
 import { Strategy } from "passport-jwt";
 
 @Injectable()
-export class JwtStrategyService extends PassportStrategy(Strategy) {
+export class AccessTokenStrategyService extends PassportStrategy(
+  Strategy,
+  "access",
+) {
   private readonly userRepository: EntityRepository<User>;
 
   public constructor(
