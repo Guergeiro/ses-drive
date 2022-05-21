@@ -1,0 +1,6 @@
+Dockerfile
+Dockerfile.dev
+node_modules
+.dockerignore
+dist/
+hooks/

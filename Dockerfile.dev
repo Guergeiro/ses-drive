@@ -1,0 +1,12 @@
+FROM guergeiro/pnpm:16 as cache
+WORKDIR /usr/src/app
+COPY package.json .
+RUN pnpm install
+
+FROM guergeiro/pnpm:16
+WORKDIR /usr/src/app
+COPY . .
+RUN rm -rdf node_modules
+COPY --from=cache /usr/src/app .
+
+CMD pnpm start:dev
