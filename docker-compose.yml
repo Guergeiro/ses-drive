@@ -1,0 +1,59 @@
+version: "3"
+
+services:
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    restart: always
+    environment:
+      - SERVICES=s3,sqs
+      - DEBUG=${DEBUG-1}
+      - DATA_DIR=${DATA_DIR-}
+      - HOST_TMP_FOLDER=${TMPDIR:-/tmp/}localstack
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-}
+      - LAMBDA_DOCKER_NETWORK=gdrive_default
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOSTNAME=0.0.0.0
+      - HOSTNAME_EXTERNAL=0.0.0.0
+    volumes:
+      - "${TMPDIR:-/tmp}/localstack:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+  setup-resources:
+    image: mesosphere/aws-cli
+    container_name: setup-resources
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: us-east-1
+    entrypoint: /bin/sh -c
+    command: >
+      "
+      sleep 10;
+      aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket public --acl public-read;
+      sleep 5;
+      aws --endpoint-url=http://localstack:4566 s3api create-bucket --bucket private --acl private;
+      "
+    depends_on:
+      - localstack
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: gdrive_backend
+    volumes:
+      - ./backend/src:/usr/src/app/src:shared
+    environment:
+      DB_USER: dev
+      DB_PASSWORD: p9m0Q9nT7Pmugtxb
+      DB_HOST: mongodb+srv://ses.bhxgf.mongodb.net
+      DB_NAME: ses
+      RECAPTCHA_SECRET: 6Ldyo5kfAAAAAJ0WXETfwVTN3iOX34fAEJ0zAEOF
+      PORT: 3000
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY: test
+      AWS_SECRET_KEY: test
+    depends_on:
+      - localstack
+      - setup-resources
+    ports:
+      - "3000:3000"
