@@ -7,6 +7,7 @@ import {
 } from "@mikro-orm/core";
 import { randomBytes } from "crypto";
 import { BaseEntity } from "./base.entity";
+import { Directory } from "./directory.entity";
 import { File } from "./file.entity";
 import { Token } from "./token.entity";
 
@@ -24,6 +25,11 @@ export class User extends BaseEntity {
 
   @Property({ hidden: true })
   tokenVersion = 1;
+
+  @OneToMany(() => Directory, (directory) => directory.owner, {
+    orphanRemoval: true,
+  })
+  folders = new Collection<Directory>(this);
 
   @OneToMany(() => File, (file) => file.owner, { orphanRemoval: true })
   files = new Collection<File>(this);

@@ -8,10 +8,14 @@ import { SignUpService } from "./use-cases/sign-up/sign-up.service";
 import { RefreshService } from "./use-cases/refresh/refresh.service";
 import { Token } from "@entities/token.entity";
 import { SignOutService } from "./use-cases/sign-out/sign-out.service";
+import { Directory } from "@entities/directory.entity";
 
 @Module({
   controllers: [AuthController],
-  imports: [MikroOrmModule.forFeature([User, Token]), ServicesModule],
+  imports: [
+    MikroOrmModule.forFeature([User, Token, Directory]),
+    ServicesModule,
+  ],
   providers: [SignInService, SignUpService, RefreshService, SignOutService],
 })
 export class AuthModule {}

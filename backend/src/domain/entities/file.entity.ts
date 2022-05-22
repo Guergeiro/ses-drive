@@ -1,5 +1,6 @@
 import { Entity, Filter, ManyToOne, Property, Unique } from "@mikro-orm/core";
 import { BaseEntity } from "./base.entity";
+import { Directory } from "./directory.entity";
 import { User } from "./user.entity";
 
 @Entity({ tableName: "files" })
@@ -22,9 +23,12 @@ export class File extends BaseEntity {
   @Unique()
   fullpath!: string;
 
-  @Property()
-  mimetype!: string;
+  @ManyToOne()
+  owner!: User;
 
   @ManyToOne()
-  owner: User;
+  folder!: Directory;
+
+  @Property()
+  mimetype!: string;
 }
