@@ -1,3 +1,4 @@
+import { Directory } from "@entities/directory.entity";
 import { File } from "@entities/file.entity";
 import { User } from "@entities/user.entity";
 import { EntityRepository } from "@mikro-orm/mongodb";
@@ -9,38 +10,44 @@ import { AwsS3Service } from "@services/aws-s3/aws-s3.service";
 @Injectable()
 export class CreateFileService {
   private readonly filesRepository: EntityRepository<File>;
+  private readonly directoryRepository: EntityRepository<Directory>;
   private readonly awsS3Service: AwsS3Service;
   private readonly eventEmitter: EventEmitter2;
 
   public constructor(
     @InjectRepository(File) filesRepository: EntityRepository<File>,
+    @InjectRepository(Directory)
+    directoryRepository: EntityRepository<Directory>,
     awsS3Service: AwsS3Service,
     eventEmitter: EventEmitter2,
   ) {
     this.filesRepository = filesRepository;
+    this.directoryRepository = directoryRepository;
     this.awsS3Service = awsS3Service;
     this.eventEmitter = eventEmitter;
   }
+
   public async execute(files: Array<Express.Multer.File>, user: User) {
     if (Array.isArray(files) === false) {
       throw new UnsupportedMediaTypeException();
     }
-    const filesArray = files.map(
-      ({ fieldname, mimetype, originalname, buffer }) => {
-        if (fieldname.endsWith("/") === true) {
-          fieldname = fieldname.replace(new RegExp("/+$"), "");
-        }
-        const fileObj = this.filesRepository.create({
-          fullpath: `${fieldname}/${originalname}`,
-          owner: user,
-          mimetype: mimetype,
-        });
+    const filesArray: Array<{ fileObj: File; buffer: Buffer; type: string }> =
+      [];
 
-        const type = fieldname.split("/").shift();
-
-        return { fileObj, buffer, type };
-      },
-    );
+    for (const { fieldname, mimetype, originalname, buffer } of files) {
+      const directory = await this.directoryRepository.findOneOrFail({
+        fullpath: fieldname,
+        owner: user,
+      });
+      const fileObj = this.filesRepository.create({
+        fullpath: `${directory.fullpath}/${originalname}`,
+        owner: user,
+        mimetype: mimetype,
+        folder: directory,
+      });
+      const type = directory.fullpath.split("/").shift(); // Either /public /private
+      filesArray.push({ fileObj, buffer, type });
+    }
 
     await this.filesRepository.persistAndFlush(
       filesArray.map(function ({ fileObj }) {
