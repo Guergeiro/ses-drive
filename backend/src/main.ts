@@ -19,7 +19,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix(env["host"]["PREFIX"]);
   app.enableShutdownHooks();
-  app.enableCors({ credentials: true, origin: "*" });
+  app.enableCors({ origin: "*" });
 
   app.use(helmet());
   app.use(cookieParser());

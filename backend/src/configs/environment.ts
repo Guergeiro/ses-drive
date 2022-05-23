@@ -76,6 +76,8 @@ async function host() {
     PORT: parseInt(process.env.PORT) || 3000,
     VERSION: v,
     PREFIX: `api/v${v}`,
+    APP_URL: process.env.APP_URL || "0.0.0.0",
+    APP_PORT: process.env.APP_PORT || 4200
   };
 }
 
