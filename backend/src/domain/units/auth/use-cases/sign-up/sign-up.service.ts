@@ -24,13 +24,28 @@ export class SignUpService {
     this.configService = configService;
   }
 
-  public async execute({ email, password }: SignUpDto) {
+  public async execute({
+    email,
+    password,
+    confirmPassword,
+    fullName,
+    terms,
+  }: SignUpDto) {
+    if (terms === false) {
+      throw new BadRequestException();
+    }
+
+    if (password !== confirmPassword) {
+      throw new BadRequestException();
+    }
+
     const previousUser = await this.userRepository.findOne({ email: email });
     if (previousUser != null) {
       throw new BadRequestException();
     }
 
     const user = this.userRepository.create({
+      name: fullName,
       email: email,
       password: `${password}:${this.configService.get<string>("auth.PEPPER")}`,
     });
