@@ -1,13 +1,14 @@
 import { User } from "@entities/user.entity";
 import { UserDecorator } from "@generics/User.decorator";
-import { AccessJwtAuthGuard } from "@guards/access-jwt.guard";
+import { BothAuthGuard } from "@guards/both-auth.guard";
 import { Controller, Get, HttpCode, Patch, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { GenerateApiKeyService } from "./use-cases/generate-api-key/generate-api-key.service";
 
 @ApiTags("me")
+@ApiSecurity("x-api-key")
 @ApiBearerAuth()
-@UseGuards(AccessJwtAuthGuard)
+@UseGuards(BothAuthGuard)
 @Controller("me")
 export class MeController {
   private readonly generateApiKeyService: GenerateApiKeyService;
