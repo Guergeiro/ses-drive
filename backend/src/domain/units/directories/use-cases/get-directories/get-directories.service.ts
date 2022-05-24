@@ -18,13 +18,16 @@ export class GetDirectoriesService {
 
   public async execute({ path }: GetDirectoriesDto, user: User) {
     if (path == null) {
-      path = `/private/${user.email}`
+      path = `/private/${user.email}`;
     }
 
-    const directory = await this.directoryRepository.findOneOrFail({
-      fullpath: path,
-      owner: user,
-    });
+    const directory = await this.directoryRepository.findOneOrFail(
+      {
+        fullpath: path,
+        owner: user,
+      },
+      { populate: ["folders", "files"] },
+    );
 
     return directory;
   }
