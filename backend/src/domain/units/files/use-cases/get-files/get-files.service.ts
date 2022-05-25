@@ -4,7 +4,6 @@ import { FindOptions } from "@mikro-orm/core";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
-import { AwsS3Service } from "@services/aws-s3/aws-s3.service";
 import { GetFilesDto } from "./get-files.dto";
 
 @Injectable()

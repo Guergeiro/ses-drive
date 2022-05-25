@@ -3,6 +3,12 @@ import { File } from "@entities/file.entity";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
+type S3RequiredFile = {
+  fileObj: File;
+  buffer: Buffer;
+  type: string;
+};
+
 @Injectable()
 export class AwsS3Service {
   private readonly client: S3;
@@ -27,17 +33,33 @@ export class AwsS3Service {
     this.client = new S3(s3Config);
   }
 
-  public createFiles(
-    files: Array<{ fileObj: File; buffer: Buffer; type: string }>,
-  ) {
-    const promises = files.map(({ fileObj, buffer, type }) => {
-      return this.client.putObject({
-        Body: buffer,
-        Bucket: type,
-        Key: fileObj.name,
-      });
+  public createFiles(files: Array<S3RequiredFile>) {
+    const promises = files.map((file) => {
+      return this.createFile(file);
     });
     return Promise.allSettled(promises);
+  }
+
+  public createFile({ fileObj, buffer, type }: S3RequiredFile) {
+    return this.client.putObject({
+      Body: buffer,
+      Bucket: type,
+      Key: fileObj.id,
+    });
+  }
+
+  public getObjects(files: Array<File>) {
+    const promises = files.map((file) => {
+      return this.getObject(file);
+    })
+    return Promise.allSettled(promises);
+  }
+
+  public getObject(file: File) {
+    const splittedPath = file.fullpath.split("/");
+    splittedPath.shift();
+    const type = splittedPath.shift(); // Either /public /private
+    return this.client.getObject({ Key: file.id, Bucket: type });
   }
 
   public async listFiles(path: string) {
