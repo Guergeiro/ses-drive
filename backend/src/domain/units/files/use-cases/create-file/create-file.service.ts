@@ -45,29 +45,21 @@ export class CreateFileService {
         mimetype: mimetype,
         folder: directory,
       });
-      const type = directory.fullpath.split("/").shift(); // Either /public /private
-      filesArray.push({ fileObj, buffer, type });
+      filesArray.push({ fileObj, buffer, type: directory.scope });
     }
 
-    await this.filesRepository.persistAndFlush(
-      filesArray.map(function ({ fileObj }) {
-        return fileObj;
-      }),
-    );
-
-    this.awsS3Service.createFiles(filesArray).then(async (results) => {
-      const outputArray = results.map(({ status }, index) => {
-        const outObj: { fileObj: File; fulfilled: boolean } = {
-          fileObj: filesArray[index].fileObj,
-          fulfilled: status === "fulfilled",
-        };
-        if (outObj.fulfilled === false) {
-          this.filesRepository.remove(outObj.fileObj);
-        }
-        return outObj;
-      });
-      await this.filesRepository.flush();
-      this.eventEmitter.emit("files.created", outputArray);
+    const results = await this.awsS3Service.createFiles(filesArray);
+    const outputArray = results.map(({ status }, index) => {
+      const outObj: { fileObj: File; fulfilled: boolean } = {
+        fileObj: filesArray[index].fileObj,
+        fulfilled: status === "fulfilled",
+      };
+      if (outObj.fulfilled === true) {
+        this.filesRepository.persist(outObj.fileObj);
+      }
+      return outObj;
     });
+    await this.filesRepository.flush();
+    return outputArray;
   }
 }

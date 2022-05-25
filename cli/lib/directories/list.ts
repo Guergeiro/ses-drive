@@ -2,7 +2,7 @@ import { Command } from "../../deps.ts";
 import { apiurl } from "../url.ts";
 import { headers } from "../_utils/headers.ts";
 import { json } from "../_utils/request.ts";
-import { FileSystem, printFileSystem } from "./_utils.ts";
+import { Directory, printFileSystem } from "./_utils.ts";
 
 export const list = new Command().description(
   "Lists everything in the directory",
@@ -15,7 +15,7 @@ export const list = new Command().description(
       url.searchParams.append("path", basepath);
     }
 
-    const data: FileSystem = await json(
+    const data: Directory = await json(
       await fetch(url.toString(), {
         headers: headers(key),
       }),
@@ -24,7 +24,7 @@ export const list = new Command().description(
   },
 );
 
-function gatherResults(data: FileSystem) {
+function gatherResults(data: Directory) {
   const output: string[] = [];
 
   output.push(printFileSystem(data));

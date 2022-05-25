@@ -27,6 +27,13 @@ export class Directory extends BaseEntity {
     return splited.pop();
   }
 
+  @Property({ persist: false })
+  get scope() {
+    const splited = this.fullpath.split("/");
+    splited.shift();
+    return splited.shift(); // Either public or private
+  }
+
   @Property()
   @Unique()
   fullpath!: string;

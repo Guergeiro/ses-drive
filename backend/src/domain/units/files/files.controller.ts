@@ -65,7 +65,6 @@ export class FilesController {
     @UploadedFiles() files: Array<Express.Multer.File>,
     @UserDecorator() user: User,
   ) {
-    console.log(files);
     return await this.createFileService.execute(files, user);
   }
 
