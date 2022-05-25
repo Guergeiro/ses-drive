@@ -45,10 +45,7 @@ export class CreateFileService {
         mimetype: mimetype,
         folder: directory,
       });
-      const splittedPath = directory.fullpath.split("/");
-      splittedPath.shift();
-      const type = splittedPath.shift(); // Either /public /private
-      filesArray.push({ fileObj, buffer, type });
+      filesArray.push({ fileObj, buffer, type: directory.scope });
     }
 
     const results = await this.awsS3Service.createFiles(filesArray);

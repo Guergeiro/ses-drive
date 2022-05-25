@@ -56,10 +56,7 @@ export class AwsS3Service {
   }
 
   public getObject(file: File) {
-    const splittedPath = file.fullpath.split("/");
-    splittedPath.shift();
-    const type = splittedPath.shift(); // Either /public /private
-    return this.client.getObject({ Key: file.id, Bucket: type });
+    return this.client.getObject({ Key: file.id, Bucket: file.scope });
   }
 
   public async listFiles(path: string) {
