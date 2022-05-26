@@ -2,10 +2,12 @@ import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as cookieParser from "cookie-parser";
+import * as cors from "cors";
 import helmet from "helmet";
 import "reflect-metadata";
 import { AppModule } from "./app.module";
 import { environment } from "./configs/environment";
+import { Request } from "express";
 
 async function bootstrap() {
   const env = await environment();
@@ -15,11 +17,23 @@ async function bootstrap() {
       env.NODE_ENV === "production"
         ? ["error", "warn"]
         : ["error", "warn", "log", "debug", "verbose"],
+    cors: function (req: Request, callback: any) {
+      const config: cors.CorsOptions = { origin: "*" };
+      if (req.url.startsWith(`/${env.host.PREFIX}/auth`)) {
+        if (env.NODE_ENV === "development") {
+          config.origin = `http://${env.host.APP_URL}:${env.host.APP_PORT}`;
+        } else {
+          config.origin = `https://${env.host.APP_URL}`;
+        }
+        config.credentials = true;
+      }
+
+      callback(null, config);
+    },
   });
 
   app.setGlobalPrefix(env["host"]["PREFIX"]);
   app.enableShutdownHooks();
-  app.enableCors({ origin: "*" });
 
   app.use(helmet());
   app.use(cookieParser());
