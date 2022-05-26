@@ -12,12 +12,19 @@ import { TranslationWidth } from '@angular/common';
   styleUrls: ['month-cell.component.scss'],
   templateUrl: 'month-cell.component.html',
 })
-export class CalendarKitMonthCellComponent extends NbCalendarDayPickerComponent<Date, Date>
-  implements NbCalendarCell<Date, Date> {
+// tslint:disable:one-line
+export class CalendarKitMonthCellComponent
+  extends NbCalendarDayPickerComponent<Date, Date>
+  implements NbCalendarCell<Date, Date>
+{
+  // tslint:enable:one-line
   select: EventEmitter<Date> = new EventEmitter();
   selectedValue: Date;
 
-  constructor(private dateService: NbDateService<Date>, monthModel: NbCalendarMonthModelService<Date>) {
+  constructor(
+    private dateService: NbDateService<Date>,
+    monthModel: NbCalendarMonthModelService<Date>,
+  ) {
     super(monthModel);
   }
 

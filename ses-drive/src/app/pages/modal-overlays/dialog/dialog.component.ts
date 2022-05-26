@@ -9,7 +9,6 @@ import { DialogNamePromptComponent } from './dialog-name-prompt/dialog-name-prom
   styleUrls: ['dialog.component.scss'],
 })
 export class DialogComponent {
-
   names: string[] = [];
 
   constructor(private dialogService: NbDialogService) {}
@@ -23,40 +22,35 @@ export class DialogComponent {
   }
 
   open2(dialog: TemplateRef<any>) {
-    this.dialogService.open(
-      dialog,
-      { context: 'this is some additional data passed to dialog' });
+    this.dialogService.open(dialog, {
+      context: 'this is some additional data passed to dialog',
+    });
   }
 
   open3() {
-    this.dialogService.open(DialogNamePromptComponent)
-      .onClose.subscribe(name => name && this.names.push(name));
+    this.dialogService
+      .open(DialogNamePromptComponent)
+      .onClose.subscribe((name) => name && this.names.push(name));
   }
 
   openWithoutBackdrop(dialog: TemplateRef<any>) {
-    this.dialogService.open(
-      dialog,
-      {
-        context: 'this is some additional data passed to dialog',
-        hasBackdrop: false,
-      });
+    this.dialogService.open(dialog, {
+      context: 'this is some additional data passed to dialog',
+      hasBackdrop: false,
+    });
   }
 
   openWithoutBackdropClick(dialog: TemplateRef<any>) {
-    this.dialogService.open(
-      dialog,
-      {
-        context: 'this is some additional data passed to dialog',
-        closeOnBackdropClick: false,
-      });
+    this.dialogService.open(dialog, {
+      context: 'this is some additional data passed to dialog',
+      closeOnBackdropClick: false,
+    });
   }
 
   openWithoutEscClose(dialog: TemplateRef<any>) {
-    this.dialogService.open(
-      dialog,
-      {
-        context: 'this is some additional data passed to dialog',
-        closeOnEsc: false,
-      });
+    this.dialogService.open(dialog, {
+      context: 'this is some additional data passed to dialog',
+      closeOnEsc: false,
+    });
   }
 }

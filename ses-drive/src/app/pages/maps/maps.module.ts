@@ -17,8 +17,6 @@ import { MapsRoutingModule, routedComponents } from './maps-routing.module';
     NbCardModule,
   ],
   exports: [],
-  declarations: [
-    ...routedComponents,
-  ],
+  declarations: [...routedComponents],
 })
-export class MapsModule { }
+export class MapsModule {}

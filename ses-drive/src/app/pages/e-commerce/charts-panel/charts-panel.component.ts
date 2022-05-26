@@ -5,7 +5,10 @@ import { OrdersChartComponent } from './charts/orders-chart.component';
 import { ProfitChartComponent } from './charts/profit-chart.component';
 import { OrdersChart } from '../../../@core/data/orders-chart';
 import { ProfitChart } from '../../../@core/data/profit-chart';
-import { OrderProfitChartSummary, OrdersProfitChartData } from '../../../@core/data/orders-profit-chart';
+import {
+  OrderProfitChartSummary,
+  OrdersProfitChartData,
+} from '../../../@core/data/orders-profit-chart';
 
 @Component({
   selector: 'ngx-ecommerce-charts',
@@ -13,7 +16,6 @@ import { OrderProfitChartSummary, OrdersProfitChartData } from '../../../@core/d
   templateUrl: './charts-panel.component.html',
 })
 export class ECommerceChartsPanelComponent implements OnDestroy {
-
   private alive = true;
 
   chartPanelSummary: OrderProfitChartSummary[];
@@ -25,7 +27,8 @@ export class ECommerceChartsPanelComponent implements OnDestroy {
   @ViewChild('profitChart', { static: true }) profitChart: ProfitChartComponent;
 
   constructor(private ordersProfitChartService: OrdersProfitChartData) {
-    this.ordersProfitChartService.getOrderProfitChartSummary()
+    this.ordersProfitChartService
+      .getOrderProfitChartSummary()
       .pipe(takeWhile(() => this.alive))
       .subscribe((summary) => {
         this.chartPanelSummary = summary;
@@ -53,17 +56,19 @@ export class ECommerceChartsPanelComponent implements OnDestroy {
   }
 
   getOrdersChartData(period: string) {
-    this.ordersProfitChartService.getOrdersChartData(period)
+    this.ordersProfitChartService
+      .getOrdersChartData(period)
       .pipe(takeWhile(() => this.alive))
-      .subscribe(ordersChartData => {
+      .subscribe((ordersChartData) => {
         this.ordersChartData = ordersChartData;
       });
   }
 
   getProfitChartData(period: string) {
-    this.ordersProfitChartService.getProfitChartData(period)
+    this.ordersProfitChartService
+      .getProfitChartData(period)
       .pipe(takeWhile(() => this.alive))
-      .subscribe(profitChartData => {
+      .subscribe((profitChartData) => {
         this.profitChartData = profitChartData;
       });
   }

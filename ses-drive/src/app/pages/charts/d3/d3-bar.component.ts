@@ -11,12 +11,12 @@ import { NbThemeService } from '@nebular/theme';
       [yAxis]="showYAxis"
       [legend]="showLegend"
       [xAxisLabel]="xAxisLabel"
-      [yAxisLabel]="yAxisLabel">
+      [yAxisLabel]="yAxisLabel"
+    >
     </ngx-charts-bar-vertical>
   `,
 })
 export class D3BarComponent implements OnDestroy {
-
   results = [
     { name: 'Germany', value: 8940 },
     { name: 'USA', value: 5000 },
@@ -31,10 +31,16 @@ export class D3BarComponent implements OnDestroy {
   themeSubscription: any;
 
   constructor(private theme: NbThemeService) {
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+    this.themeSubscription = this.theme.getJsTheme().subscribe((config) => {
       const colors: any = config.variables;
       this.colorScheme = {
-        domain: [colors.primaryLight, colors.infoLight, colors.successLight, colors.warningLight, colors.dangerLight],
+        domain: [
+          colors.primaryLight,
+          colors.infoLight,
+          colors.successLight,
+          colors.warningLight,
+          colors.dangerLight,
+        ],
       };
     });
   }

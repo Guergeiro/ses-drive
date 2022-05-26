@@ -7,7 +7,6 @@ import { Subject } from 'rxjs';
 
 @Injectable()
 export class SeoService implements OnDestroy {
-
   private readonly destroy$ = new Subject<void>();
   private readonly dom: Document;
   private readonly isBrowser: boolean;
@@ -43,10 +42,11 @@ export class SeoService implements OnDestroy {
       return;
     }
 
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      takeUntil(this.destroy$),
-    )
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$),
+      )
       .subscribe(() => {
         this.linkCanonical.setAttribute('href', this.getCanonicalUrl());
       });

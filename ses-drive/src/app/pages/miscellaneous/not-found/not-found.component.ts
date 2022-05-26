@@ -7,9 +7,7 @@ import { Component } from '@angular/core';
   templateUrl: './not-found.component.html',
 })
 export class NotFoundComponent {
-
-  constructor(private menuService: NbMenuService) {
-  }
+  constructor(private menuService: NbMenuService) {}
 
   goToHome() {
     this.menuService.navigateHome();

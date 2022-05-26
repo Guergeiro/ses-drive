@@ -8,7 +8,6 @@ import { NgxLegendItemColor } from './enum.legend-item-color';
   templateUrl: './legend-chart.component.html',
 })
 export class ECommerceLegendChartComponent {
-
   /**
    * Take an array of legend items
    * Available iconColor: 'green', 'purple', 'light-purple', 'blue', 'yellow'

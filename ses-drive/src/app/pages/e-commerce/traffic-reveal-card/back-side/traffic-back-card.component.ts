@@ -8,7 +8,6 @@ import { takeWhile } from 'rxjs/operators';
   templateUrl: './traffic-back-card.component.html',
 })
 export class TrafficBackCardComponent implements OnDestroy {
-
   private alive = true;
 
   @Input() trafficBarData: any;
@@ -16,11 +15,12 @@ export class TrafficBackCardComponent implements OnDestroy {
   currentTheme: string;
 
   constructor(private themeService: NbThemeService) {
-    this.themeService.getJsTheme()
+    this.themeService
+      .getJsTheme()
       .pipe(takeWhile(() => this.alive))
-      .subscribe(theme => {
+      .subscribe((theme) => {
         this.currentTheme = theme.name;
-    });
+      });
   }
 
   ngOnDestroy() {

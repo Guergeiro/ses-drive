@@ -48,7 +48,8 @@ export const messages = [
     reply: false,
     date: new Date(),
     type: 'quote',
-    quote: 'Hello, how are you? This should be a very long message so that we can test how it fit into the screen.',
+    quote:
+      'Hello, how are you? This should be a very long message so that we can test how it fit into the screen.',
     user: {
       name: 'John Doe',
       avatar: '',

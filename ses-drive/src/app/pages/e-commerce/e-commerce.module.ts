@@ -31,15 +31,9 @@ import { TrafficFrontCardComponent } from './traffic-reveal-card/front-side/traf
 import { TrafficCardsHeaderComponent } from './traffic-reveal-card/traffic-cards-header/traffic-cards-header.component';
 import { TrafficBackCardComponent } from './traffic-reveal-card/back-side/traffic-back-card.component';
 import { TrafficBarChartComponent } from './traffic-reveal-card/back-side/traffic-bar-chart.component';
-import {
-  ECommerceVisitorsAnalyticsComponent,
-} from './visitors-analytics/visitors-analytics.component';
-import {
-  ECommerceVisitorsAnalyticsChartComponent,
-} from './visitors-analytics/visitors-analytics-chart/visitors-analytics-chart.component';
-import {
-  ECommerceVisitorsStatisticsComponent,
-} from './visitors-analytics/visitors-statistics/visitors-statistics.component';
+import { ECommerceVisitorsAnalyticsComponent } from './visitors-analytics/visitors-analytics.component';
+import { ECommerceVisitorsAnalyticsChartComponent } from './visitors-analytics/visitors-analytics-chart/visitors-analytics-chart.component';
+import { ECommerceVisitorsStatisticsComponent } from './visitors-analytics/visitors-statistics/visitors-statistics.component';
 import { ECommerceLegendChartComponent } from './legend-chart/legend-chart.component';
 import { ECommerceUserActivityComponent } from './user-activity/user-activity.component';
 import { ECommerceProgressSectionComponent } from './progress-section/progress-section.component';
@@ -106,8 +100,6 @@ import { EarningLiveUpdateChartComponent } from './earning-card/front-side/earni
     EarningPieChartComponent,
     EarningLiveUpdateChartComponent,
   ],
-  providers: [
-    CountryOrdersMapService,
-  ],
+  providers: [CountryOrdersMapService],
 })
-export class ECommerceModule { }
+export class ECommerceModule {}

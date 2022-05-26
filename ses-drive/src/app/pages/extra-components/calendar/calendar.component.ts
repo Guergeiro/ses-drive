@@ -9,7 +9,6 @@ import { DayCellComponent } from './day-cell/day-cell.component';
   entryComponents: [DayCellComponent],
 })
 export class CalendarComponent {
-
   date = new Date();
   date2 = new Date();
   range: NbCalendarRange<Date>;

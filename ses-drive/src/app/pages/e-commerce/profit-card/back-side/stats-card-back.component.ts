@@ -8,13 +8,13 @@ import { takeWhile } from 'rxjs/operators';
   templateUrl: './stats-card-back.component.html',
 })
 export class StatsCardBackComponent implements OnDestroy {
-
   private alive = true;
 
   chartData: number[];
 
   constructor(private statsBarData: StatsBarData) {
-    this.statsBarData.getStatsBarData()
+    this.statsBarData
+      .getStatsBarData()
       .pipe(takeWhile(() => this.alive))
       .subscribe((data) => {
         this.chartData = data;

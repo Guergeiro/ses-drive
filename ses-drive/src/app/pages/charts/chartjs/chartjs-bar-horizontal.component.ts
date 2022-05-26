@@ -13,22 +13,37 @@ export class ChartjsBarHorizontalComponent implements OnDestroy {
   themeSubscription: any;
 
   constructor(private theme: NbThemeService) {
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
+    this.themeSubscription = this.theme.getJsTheme().subscribe((config) => {
       const colors: any = config.variables;
       const chartjs: any = config.variables.chartjs;
 
       this.data = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-        datasets: [{
+        datasets: [
+          {
             label: 'Dataset 1',
             backgroundColor: colors.infoLight,
             borderWidth: 1,
-            data: [this.random(), this.random(), this.random(), this.random(), this.random(), this.random()],
-          }, {
+            data: [
+              this.random(),
+              this.random(),
+              this.random(),
+              this.random(),
+              this.random(),
+              this.random(),
+            ],
+          },
+          {
             label: 'Dataset 2',
             backgroundColor: colors.successLight,
-            data: [this.random(), this.random(), this.random(), this.random(), this.random(), this.random()],
+            data: [
+              this.random(),
+              this.random(),
+              this.random(),
+              this.random(),
+              this.random(),
+              this.random(),
+            ],
           },
         ],
       };

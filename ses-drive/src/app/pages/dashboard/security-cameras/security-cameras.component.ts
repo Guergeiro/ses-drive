@@ -1,9 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { NbComponentSize, NbMediaBreakpointsService, NbThemeService } from '@nebular/theme';
+import {
+  NbComponentSize,
+  NbMediaBreakpointsService,
+  NbThemeService,
+} from '@nebular/theme';
 
-import { Camera, SecurityCamerasData } from '../../../@core/data/security-cameras';
+import {
+  Camera,
+  SecurityCamerasData,
+} from '../../../@core/data/security-cameras';
 
 @Component({
   selector: 'ngx-security-cameras',
@@ -11,7 +18,6 @@ import { Camera, SecurityCamerasData } from '../../../@core/data/security-camera
   templateUrl: './security-cameras.component.html',
 })
 export class SecurityCamerasComponent implements OnInit, OnDestroy {
-
   private destroy$ = new Subject<void>();
 
   cameras: Camera[];
@@ -26,7 +32,8 @@ export class SecurityCamerasComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.securityCamerasService.getCamerasData()
+    this.securityCamerasService
+      .getCamerasData()
       .pipe(takeUntil(this.destroy$))
       .subscribe((cameras: Camera[]) => {
         this.cameras = cameras;
@@ -34,7 +41,8 @@ export class SecurityCamerasComponent implements OnInit, OnDestroy {
       });
 
     const breakpoints = this.breakpointService.getBreakpointsMap();
-    this.themeService.onMediaQueryChange()
+    this.themeService
+      .onMediaQueryChange()
       .pipe(map(([, breakpoint]) => breakpoint.width))
       .subscribe((width: number) => {
         this.actionSize = width > breakpoints.md ? 'medium' : 'small';

@@ -4,6 +4,4 @@ import { Component } from '@angular/core';
   selector: 'ngx-spinner-color',
   templateUrl: 'spinner-color.component.html',
 })
-
-export class SpinnerColorComponent {
-}
+export class SpinnerColorComponent {}

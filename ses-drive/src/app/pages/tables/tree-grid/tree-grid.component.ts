@@ -1,5 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { NbSortDirection, NbSortRequest, NbTreeGridDataSource, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import {
+  NbSortDirection,
+  NbSortRequest,
+  NbTreeGridDataSource,
+  NbTreeGridDataSourceBuilder,
+} from '@nebular/theme';
 
 interface TreeNode<T> {
   data: T;
@@ -21,8 +26,8 @@ interface FSEntry {
 })
 export class TreeGridComponent {
   customColumn = 'name';
-  defaultColumns = [ 'size', 'kind', 'items' ];
-  allColumns = [ this.customColumn, ...this.defaultColumns ];
+  defaultColumns = ['size', 'kind', 'items'];
+  allColumns = [this.customColumn, ...this.defaultColumns];
 
   dataSource: NbTreeGridDataSource<FSEntry>;
 
@@ -74,14 +79,17 @@ export class TreeGridComponent {
   getShowOn(index: number) {
     const minWithForMultipleColumns = 400;
     const nextColumnStep = 100;
-    return minWithForMultipleColumns + (nextColumnStep * index);
+    return minWithForMultipleColumns + nextColumnStep * index;
   }
 }
 
 @Component({
   selector: 'ngx-fs-icon',
   template: `
-    <nb-tree-grid-row-toggle [expanded]="expanded" *ngIf="isDir(); else fileIcon">
+    <nb-tree-grid-row-toggle
+      [expanded]="expanded"
+      *ngIf="isDir(); else fileIcon"
+    >
     </nb-tree-grid-row-toggle>
     <ng-template #fileIcon>
       <nb-icon icon="file-text-outline"></nb-icon>

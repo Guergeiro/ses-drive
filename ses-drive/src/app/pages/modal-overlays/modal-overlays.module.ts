@@ -27,11 +27,11 @@ import { WindowFormComponent } from './window/window-form/window-form.component'
 import { ToastrComponent } from './toastr/toastr.component';
 import { PopoversComponent } from './popovers/popovers.component';
 import {
-  NgxPopoverCardComponent, NgxPopoverFormComponent,
+  NgxPopoverCardComponent,
+  NgxPopoverFormComponent,
   NgxPopoverTabsComponent,
 } from './popovers/popover-examples.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
-
 
 const COMPONENTS = [
   ModalOverlaysComponent,
@@ -73,22 +73,12 @@ const MODULES = [
   NbTooltipModule,
 ];
 
-const SERVICES = [
-];
+const SERVICES = [];
 
 @NgModule({
-  imports: [
-    ...MODULES,
-  ],
-  declarations: [
-    ...COMPONENTS,
-  ],
-  providers: [
-    ...SERVICES,
-  ],
-  entryComponents: [
-    ...ENTRY_COMPONENTS,
-  ],
+  imports: [...MODULES],
+  declarations: [...COMPONENTS],
+  providers: [...SERVICES],
+  entryComponents: [...ENTRY_COMPONENTS],
 })
-export class ModalOverlaysModule {
-}
+export class ModalOverlaysModule {}

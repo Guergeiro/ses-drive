@@ -1,6 +1,15 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import {
+  ModuleWithProviders,
+  NgModule,
+  Optional,
+  SkipSelf,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbDummyAuthStrategy } from '@nebular/auth';
+import {
+  NbAuthModule,
+  NbPasswordAuthStrategy,
+  NbAuthSimpleToken,
+} from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
@@ -52,24 +61,10 @@ import { StatsProgressBarService } from './mock/stats-progress-bar.service';
 import { VisitorsAnalyticsService } from './mock/visitors-analytics.service';
 import { SecurityCamerasService } from './mock/security-cameras.service';
 import { MockDataModule } from './mock/mock-data.module';
-
-const socialLinks = [
-  {
-    url: 'https://github.com/akveo/nebular',
-    target: '_blank',
-    icon: 'github',
-  },
-  {
-    url: 'https://www.facebook.com/akveo/',
-    target: '_blank',
-    icon: 'facebook',
-  },
-  {
-    url: 'https://twitter.com/akveo_inc',
-    target: '_blank',
-    icon: 'twitter',
-  },
-];
+import { environment } from '../../environments/environment';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '../modules/auth/interceptors/auth.interceptor';
+import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
 
 const DATA_SERVICES = [
   { provide: UserData, useClass: UserService },
@@ -82,7 +77,10 @@ const DATA_SERVICES = [
   { provide: EarningData, useClass: EarningService },
   { provide: OrdersProfitChartData, useClass: OrdersProfitChartService },
   { provide: TrafficBarData, useClass: TrafficBarService },
-  { provide: ProfitBarAnimationChartData, useClass: ProfitBarAnimationChartService },
+  {
+    provide: ProfitBarAnimationChartData,
+    useClass: ProfitBarAnimationChartService,
+  },
   { provide: TemperatureHumidityData, useClass: TemperatureHumidityService },
   { provide: SolarData, useClass: SolarService },
   { provide: TrafficChartData, useClass: TrafficChartService },
@@ -100,23 +98,52 @@ export class NbSimpleRoleProvider extends NbRoleProvider {
   }
 }
 
+const formSetting = {
+  redirectDelay: 500,
+  showMessages: {
+    success: true,
+    error: true,
+  },
+};
+
 export const NB_CORE_PROVIDERS = [
   ...MockDataModule.forRoot().providers,
   ...DATA_SERVICES,
   ...NbAuthModule.forRoot({
-
     strategies: [
-      NbDummyAuthStrategy.setup({
+      NbPasswordAuthStrategy.setup({
         name: 'email',
-        delay: 3000,
+
+        token: {
+          key: 'accessToken',
+          class: NbAuthSimpleToken,
+        },
+
+        baseEndpoint: environment.API_URL_PREFIX,
+
+        login: {
+          endpoint: 'auth/sign-in',
+        },
+        register: {
+          endpoint: 'auth/sign-up',
+          requireValidToken: false,
+        },
+        logout: {
+          endpoint: 'auth/sign-out',
+          method: 'post',
+        },
+        refreshToken: {
+          endpoint: 'auth/refresh',
+          method: 'get',
+        },
       }),
     ],
+
     forms: {
-      login: {
-        socialLinks: socialLinks,
-      },
-      register: {
-        socialLinks: socialLinks,
+      login: formSetting,
+
+      logout: {
+        redirectDelay: 0,
       },
     },
   }).providers,
@@ -136,7 +163,8 @@ export const NB_CORE_PROVIDERS = [
   }).providers,
 
   {
-    provide: NbRoleProvider, useClass: NbSimpleRoleProvider,
+    provide: NbRoleProvider,
+    useClass: NbSimpleRoleProvider,
   },
   AnalyticsService,
   LayoutService,
@@ -146,12 +174,8 @@ export const NB_CORE_PROVIDERS = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-  ],
-  exports: [
-    NbAuthModule,
-  ],
+  imports: [CommonModule],
+  exports: [NbAuthModule],
   declarations: [],
 })
 export class CoreModule {
@@ -164,6 +188,17 @@ export class CoreModule {
       ngModule: CoreModule,
       providers: [
         ...NB_CORE_PROVIDERS,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AuthInterceptor,
+          multi: true,
+        },
+        {
+          provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+          useValue: (req) => {
+            return false;
+          },
+        },
       ],
     };
   }

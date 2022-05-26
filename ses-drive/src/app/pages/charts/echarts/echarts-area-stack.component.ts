@@ -3,26 +3,28 @@ import { NbThemeService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-echarts-area-stack',
-  template: `
-    <div echarts [options]="options" class="echart"></div>
-  `,
+  template: ` <div echarts [options]="options" class="echart"></div> `,
 })
 export class EchartsAreaStackComponent implements AfterViewInit, OnDestroy {
   options: any = {};
   themeSubscription: any;
 
-  constructor(private theme: NbThemeService) {
-  }
+  constructor(private theme: NbThemeService) {}
 
   ngAfterViewInit() {
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
+    this.themeSubscription = this.theme.getJsTheme().subscribe((config) => {
       const colors: any = config.variables;
       const echarts: any = config.variables.echarts;
 
       this.options = {
         backgroundColor: echarts.bg,
-        color: [colors.warningLight, colors.infoLight, colors.dangerLight, colors.successLight, colors.primaryLight],
+        color: [
+          colors.warningLight,
+          colors.infoLight,
+          colors.dangerLight,
+          colors.successLight,
+          colors.primaryLight,
+        ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -33,7 +35,13 @@ export class EchartsAreaStackComponent implements AfterViewInit, OnDestroy {
           },
         },
         legend: {
-          data: ['Mail marketing', 'Affiliate advertising', 'Video ad', 'Direct interview', 'Search engine'],
+          data: [
+            'Mail marketing',
+            'Affiliate advertising',
+            'Video ad',
+            'Direct interview',
+            'Search engine',
+          ],
           textStyle: {
             color: echarts.textColor,
           },
@@ -48,7 +56,15 @@ export class EchartsAreaStackComponent implements AfterViewInit, OnDestroy {
           {
             type: 'category',
             boundaryGap: false,
-            data: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            data: [
+              'Monday',
+              'Tuesday',
+              'Wednesday',
+              'Thursday',
+              'Friday',
+              'Saturday',
+              'Sunday',
+            ],
             axisTick: {
               alignWithLabel: true,
             },

@@ -6,10 +6,9 @@ import { ChatService } from './chat.service';
   selector: 'ngx-chat',
   templateUrl: 'chat.component.html',
   styleUrls: ['chat.component.scss'],
-  providers: [ ChatService ],
+  providers: [ChatService],
 })
 export class ChatComponent {
-
   messages: any[];
 
   constructor(protected chatService: ChatService) {
@@ -17,13 +16,15 @@ export class ChatComponent {
   }
 
   sendMessage(event: any) {
-    const files = !event.files ? [] : event.files.map((file) => {
-      return {
-        url: file.src,
-        type: file.type,
-        icon: 'nb-compose',
-      };
-    });
+    const files = !event.files
+      ? []
+      : event.files.map((file) => {
+          return {
+            url: file.src,
+            type: file.type,
+            icon: 'nb-compose',
+          };
+        });
 
     this.messages.push({
       text: event.message,
@@ -38,7 +39,9 @@ export class ChatComponent {
     });
     const botReply = this.chatService.reply(event.message);
     if (botReply) {
-      setTimeout(() => { this.messages.push(botReply); }, 500);
+      setTimeout(() => {
+        this.messages.push(botReply);
+      }, 500);
     }
   }
 }

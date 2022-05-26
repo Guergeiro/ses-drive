@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: 'nebular-form-inputs.component.html',
   styleUrls: ['nebular-form-inputs.component.scss'],
 })
-export class NebularFormInputsComponent {
-
-}
+export class NebularFormInputsComponent {}

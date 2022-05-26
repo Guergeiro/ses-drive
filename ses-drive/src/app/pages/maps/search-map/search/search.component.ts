@@ -1,4 +1,12 @@
-import { Component, ElementRef, EventEmitter, NgZone, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  NgZone,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { PositionModel } from '../entity/position.model';
 
 @Component({
@@ -6,7 +14,6 @@ import { PositionModel } from '../entity/position.model';
   templateUrl: './search.component.html',
 })
 export class SearchComponent implements OnInit {
-
   @Output()
   positionChanged: EventEmitter<PositionModel> = new EventEmitter<PositionModel>();
 
@@ -17,7 +24,8 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     const autocomplete = new google.maps.places.Autocomplete(
-      this.searchElementRef.nativeElement, { types: ['address'] },
+      this.searchElementRef.nativeElement,
+      { types: ['address'] },
     );
 
     autocomplete.addListener('place_changed', () => {
@@ -30,10 +38,12 @@ export class SearchComponent implements OnInit {
           return;
         }
 
-        this.positionChanged.emit(new PositionModel(
-          place.geometry.location.lat(),
-          place.geometry.location.lng(),
-        ));
+        this.positionChanged.emit(
+          new PositionModel(
+            place.geometry.location.lat(),
+            place.geometry.location.lng(),
+          ),
+        );
       });
     });
   }

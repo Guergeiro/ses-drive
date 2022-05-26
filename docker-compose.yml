@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: gdrive_backend
     volumes:
-      - ./backend/src:/usr/src/app/src:shared
+      - ./backend/src:/usr/src/app/src
     environment:
       DB_USER: dev
       DB_PASSWORD: p9m0Q9nT7Pmugtxb
@@ -52,6 +52,7 @@ services:
       AWS_REGION: us-east-1
       AWS_ACCESS_KEY: test
       AWS_SECRET_KEY: test
+      APP_URL: localhost
     depends_on:
       - localstack
       - setup-resources

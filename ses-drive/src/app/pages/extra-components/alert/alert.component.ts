@@ -4,6 +4,4 @@ import { Component } from '@angular/core';
   selector: 'ngx-alert',
   templateUrl: 'alert.component.html',
 })
-export class AlertComponent {
-
-}
+export class AlertComponent {}

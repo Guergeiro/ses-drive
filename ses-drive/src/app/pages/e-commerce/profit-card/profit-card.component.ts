@@ -6,7 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './profit-card.component.html',
 })
 export class ProfitCardComponent {
-
   flipped = false;
 
   toggleView() {

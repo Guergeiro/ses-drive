@@ -8,13 +8,15 @@ import { takeWhile } from 'rxjs/operators';
   templateUrl: './stats-card-front.component.html',
 })
 export class StatsCardFrontComponent {
-
   private alive = true;
 
   linesData: { firstLine: number[]; secondLine: number[] };
 
-  constructor(private profitBarAnimationChartService: ProfitBarAnimationChartData) {
-    this.profitBarAnimationChartService.getChartData()
+  constructor(
+    private profitBarAnimationChartService: ProfitBarAnimationChartData,
+  ) {
+    this.profitBarAnimationChartService
+      .getChartData()
       .pipe(takeWhile(() => this.alive))
       .subscribe((linesData) => {
         this.linesData = linesData;

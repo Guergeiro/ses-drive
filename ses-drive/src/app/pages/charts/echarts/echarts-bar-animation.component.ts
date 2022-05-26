@@ -3,19 +3,16 @@ import { NbThemeService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-echarts-bar-animation',
-  template: `
-    <div echarts [options]="options" class="echart"></div>
-  `,
+  template: ` <div echarts [options]="options" class="echart"></div> `,
 })
 export class EchartsBarAnimationComponent implements AfterViewInit, OnDestroy {
   options: any = {};
   themeSubscription: any;
 
-  constructor(private theme: NbThemeService) {
-  }
+  constructor(private theme: NbThemeService) {}
 
   ngAfterViewInit() {
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+    this.themeSubscription = this.theme.getJsTheme().subscribe((config) => {
       const xAxisData = [];
       const data1 = [];
       const data2 = [];
@@ -76,17 +73,17 @@ export class EchartsBarAnimationComponent implements AfterViewInit, OnDestroy {
             name: 'bar',
             type: 'bar',
             data: data1,
-            animationDelay: idx => idx * 10,
+            animationDelay: (idx) => idx * 10,
           },
           {
             name: 'bar2',
             type: 'bar',
             data: data2,
-            animationDelay: idx => idx * 10 + 100,
+            animationDelay: (idx) => idx * 10 + 100,
           },
         ],
         animationEasing: 'elasticOut',
-        animationDelayUpdate: idx => idx * 5,
+        animationDelayUpdate: (idx) => idx * 5,
       };
 
       for (let i = 0; i < 100; i++) {

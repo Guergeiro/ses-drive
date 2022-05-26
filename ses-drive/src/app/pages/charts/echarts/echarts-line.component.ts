@@ -3,20 +3,16 @@ import { NbThemeService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-echarts-line',
-  template: `
-    <div echarts [options]="options" class="echart"></div>
-  `,
+  template: ` <div echarts [options]="options" class="echart"></div> `,
 })
 export class EchartsLineComponent implements AfterViewInit, OnDestroy {
   options: any = {};
   themeSubscription: any;
 
-  constructor(private theme: NbThemeService) {
-  }
+  constructor(private theme: NbThemeService) {}
 
   ngAfterViewInit() {
-    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
+    this.themeSubscription = this.theme.getJsTheme().subscribe((config) => {
       const colors: any = config.variables;
       const echarts: any = config.variables.echarts;
 
@@ -93,7 +89,17 @@ export class EchartsLineComponent implements AfterViewInit, OnDestroy {
           {
             name: 'Line 3',
             type: 'line',
-            data: [1 / 2, 1 / 4, 1 / 8, 1 / 16, 1 / 32, 1 / 64, 1 / 128, 1 / 256, 1 / 512],
+            data: [
+              1 / 2,
+              1 / 4,
+              1 / 8,
+              1 / 16,
+              1 / 32,
+              1 / 64,
+              1 / 128,
+              1 / 256,
+              1 / 512,
+            ],
           },
         ],
       };

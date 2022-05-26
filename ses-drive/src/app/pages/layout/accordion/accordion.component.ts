@@ -6,7 +6,6 @@ import { Component, ViewChild } from '@angular/core';
   styleUrls: ['accordion.component.scss'],
 })
 export class AccordionComponent {
-
   @ViewChild('item', { static: true }) accordion;
 
   toggle() {
