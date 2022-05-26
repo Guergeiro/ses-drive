@@ -75,11 +75,11 @@ export class PlayerComponent implements OnDestroy {
   }
 
   setProgress(duration: number) {
-    this.player.currentTime = this.player.duration * duration / 100;
+    this.player.currentTime = (this.player.duration * duration) / 100;
   }
 
   getProgress(): number {
-    return this.player.currentTime / this.player.duration * 100 || 0;
+    return (this.player.currentTime / this.player.duration) * 100 || 0;
   }
 
   private createPlayer() {

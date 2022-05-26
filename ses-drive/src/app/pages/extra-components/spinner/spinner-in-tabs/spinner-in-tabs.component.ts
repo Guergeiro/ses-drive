@@ -5,13 +5,11 @@ import { Component } from '@angular/core';
   templateUrl: 'spinner-in-tabs.component.html',
   styleUrls: ['spinner-in-tabs.component.scss'],
 })
-
 export class SpinnerInTabsComponent {
-
   loading = false;
 
   toggleLoadingAnimation() {
     this.loading = true;
-    setTimeout(() => this.loading = false, 1000);
+    setTimeout(() => (this.loading = false), 1000);
   }
 }

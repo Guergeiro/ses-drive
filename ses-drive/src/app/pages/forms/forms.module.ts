@@ -4,7 +4,8 @@ import {
   NbButtonModule,
   NbCardModule,
   NbCheckboxModule,
-  NbDatepickerModule, NbIconModule,
+  NbDatepickerModule,
+  NbIconModule,
   NbInputModule,
   NbRadioModule,
   NbSelectModule,
@@ -44,4 +45,4 @@ import { FormsModule as ngFormsModule } from '@angular/forms';
     DatepickerComponent,
   ],
 })
-export class FormsModule { }
+export class FormsModule {}

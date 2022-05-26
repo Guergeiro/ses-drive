@@ -1,9 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
 import { NbThemeService } from '@nebular/theme';
-import { OutlineData, VisitorsAnalyticsData } from '../../../@core/data/visitors-analytics';
+import {
+  OutlineData,
+  VisitorsAnalyticsData,
+} from '../../../@core/data/visitors-analytics';
 import { forkJoin } from 'rxjs';
-
 
 @Component({
   selector: 'ngx-ecommerce-visitors-analytics',
@@ -14,14 +16,17 @@ export class ECommerceVisitorsAnalyticsComponent implements OnDestroy {
   private alive = true;
 
   pieChartValue: number;
-  chartLegend: {iconColor: string; title: string}[];
-  visitorsAnalyticsData: { innerLine: number[]; outerLine: OutlineData[]; };
+  chartLegend: { iconColor: string; title: string }[];
+  visitorsAnalyticsData: { innerLine: number[]; outerLine: OutlineData[] };
 
-  constructor(private themeService: NbThemeService,
-              private visitorsAnalyticsChartService: VisitorsAnalyticsData) {
-    this.themeService.getJsTheme()
+  constructor(
+    private themeService: NbThemeService,
+    private visitorsAnalyticsChartService: VisitorsAnalyticsData,
+  ) {
+    this.themeService
+      .getJsTheme()
       .pipe(takeWhile(() => this.alive))
-      .subscribe(theme => {
+      .subscribe((theme) => {
         this.setLegendItems(theme.variables.visitorsLegend);
       });
 
@@ -31,14 +36,20 @@ export class ECommerceVisitorsAnalyticsComponent implements OnDestroy {
       this.visitorsAnalyticsChartService.getPieChartData(),
     )
       .pipe(takeWhile(() => this.alive))
-      .subscribe(([innerLine, outerLine, pieChartValue]: [number[], OutlineData[], number]) => {
-        this.visitorsAnalyticsData = {
-          innerLine: innerLine,
-          outerLine: outerLine,
-        };
+      .subscribe(
+        ([innerLine, outerLine, pieChartValue]: [
+          number[],
+          OutlineData[],
+          number,
+        ]) => {
+          this.visitorsAnalyticsData = {
+            innerLine: innerLine,
+            outerLine: outerLine,
+          };
 
-        this.pieChartValue = pieChartValue;
-      });
+          this.pieChartValue = pieChartValue;
+        },
+      );
   }
 
   setLegendItems(visitorsLegend): void {

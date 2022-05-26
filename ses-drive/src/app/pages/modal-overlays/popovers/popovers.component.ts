@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {
-  NgxPopoverCardComponent, NgxPopoverFormComponent,
+  NgxPopoverCardComponent,
+  NgxPopoverFormComponent,
   NgxPopoverTabsComponent,
 } from './popover-examples.component';
 

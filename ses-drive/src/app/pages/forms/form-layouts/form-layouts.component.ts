@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./form-layouts.component.scss'],
   templateUrl: './form-layouts.component.html',
 })
-export class FormLayoutsComponent {
-
-}
+export class FormLayoutsComponent {}

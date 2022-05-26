@@ -6,7 +6,6 @@ import { Component, HostBinding } from '@angular/core';
   styleUrls: ['news-post-placeholder.component.scss'],
 })
 export class NewsPostPlaceholderComponent {
-
   @HostBinding('attr.aria-label')
   label = 'Loading';
 }

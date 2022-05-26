@@ -1,5 +1,11 @@
 import { NgModule } from '@angular/core';
-import { NbAlertModule, NbCardModule, NbIconModule, NbPopoverModule, NbSearchModule } from '@nebular/theme';
+import {
+  NbAlertModule,
+  NbCardModule,
+  NbIconModule,
+  NbPopoverModule,
+  NbSearchModule,
+} from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { UiFeaturesRoutingModule } from './ui-features-routing.module';
@@ -27,8 +33,6 @@ const components = [
     ThemeModule,
     UiFeaturesRoutingModule,
   ],
-  declarations: [
-    ...components,
-  ],
+  declarations: [...components],
 })
-export class UiFeaturesModule { }
+export class UiFeaturesModule {}

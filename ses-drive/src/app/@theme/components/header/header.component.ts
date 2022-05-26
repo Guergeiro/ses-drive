@@ -1,20 +1,20 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   NbMediaBreakpointsService,
   NbMenuService,
   NbSidebarService,
   NbThemeService,
-} from "@nebular/theme";
+} from '@nebular/theme';
 
-import { UserData } from "../../../@core/data/users";
-import { LayoutService } from "../../../@core/utils";
-import { map, takeUntil } from "rxjs/operators";
-import { Subject } from "rxjs";
+import { UserData } from '../../../@core/data/users';
+import { LayoutService } from '../../../@core/utils';
+import { map, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
-  selector: "ngx-header",
-  styleUrls: ["./header.component.scss"],
-  templateUrl: "./header.component.html",
+  selector: 'ngx-header',
+  styleUrls: ['./header.component.scss'],
+  templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
@@ -23,26 +23,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   themes = [
     {
-      value: "default",
-      name: "Light",
+      value: 'default',
+      name: 'Light',
     },
     {
-      value: "dark",
-      name: "Dark",
+      value: 'dark',
+      name: 'Dark',
     },
     {
-      value: "cosmic",
-      name: "Cosmic",
+      value: 'cosmic',
+      name: 'Cosmic',
     },
     {
-      value: "corporate",
-      name: "Corporate",
+      value: 'corporate',
+      name: 'Corporate',
     },
   ];
 
-  currentTheme = "default";
+  currentTheme = 'default';
 
-  userMenu = [{ title: "Profile" }, { title: "Log out", link: "auth/logout" }];
+  userMenu = [{ title: 'Profile' }, { title: 'Log out', link: 'auth/logout' }];
 
   constructor(
     private sidebarService: NbSidebarService,
@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private themeService: NbThemeService,
     private userService: UserData,
     private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService
+    private breakpointService: NbMediaBreakpointsService,
   ) {}
 
   ngOnInit() {
@@ -66,17 +66,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .onMediaQueryChange()
       .pipe(
         map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(
-        (isLessThanXl: boolean) => (this.userPictureOnly = isLessThanXl)
+        (isLessThanXl: boolean) => (this.userPictureOnly = isLessThanXl),
       );
 
     this.themeService
       .onThemeChange()
       .pipe(
         map(({ name }) => name),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe((themeName) => (this.currentTheme = themeName));
   }
@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleSidebar(): boolean {
-    this.sidebarService.toggle(true, "menu-sidebar");
+    this.sidebarService.toggle(true, 'menu-sidebar');
     this.layoutService.changeLayoutSize();
 
     return false;

@@ -6,7 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['interactive-progress-bar.component.scss'],
 })
 export class InteractiveProgressBarComponent {
-
   value = 25;
 
   get status() {

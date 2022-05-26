@@ -25,9 +25,7 @@ import { SpinnerInButtonsComponent } from './spinner/spinner-in-buttons/spinner-
 import { SpinnerSizesComponent } from './spinner/spinner-sizes/spinner-sizes.component';
 import { SpinnerColorComponent } from './spinner/spinner-color/spinner-color.component';
 import { SpinnerComponent } from './spinner/spinner.component';
-import {
-  InteractiveProgressBarComponent,
-} from './progress-bar/interactive-progress-bar/interactive-progress-bar.component';
+import { InteractiveProgressBarComponent } from './progress-bar/interactive-progress-bar/interactive-progress-bar.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { AlertComponent } from './alert/alert.component';
 import { ChatComponent } from './chat/chat.component';
@@ -76,11 +74,7 @@ const MODULES = [
 ];
 
 @NgModule({
-  imports: [
-    ...MODULES,
-  ],
-  declarations: [
-    ...COMPONENTS,
-  ],
+  imports: [...MODULES],
+  declarations: [...COMPONENTS],
 })
-export class ExtraComponentsModule { }
+export class ExtraComponentsModule {}

@@ -6,7 +6,6 @@ import { Component, Input } from '@angular/core';
   templateUrl: './slide-out.component.html',
 })
 export class SlideOutComponent {
-
   @Input() showVisitorsStatistics: boolean = false;
 
   toggleStatistics() {

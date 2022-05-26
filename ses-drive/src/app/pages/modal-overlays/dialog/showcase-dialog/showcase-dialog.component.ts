@@ -7,7 +7,6 @@ import { NbDialogRef } from '@nebular/theme';
   styleUrls: ['showcase-dialog.component.scss'],
 })
 export class ShowcaseDialogComponent {
-
   @Input() title: string;
 
   constructor(protected ref: NbDialogRef<ShowcaseDialogComponent>) {}

@@ -8,22 +8,20 @@ import { WindowFormComponent } from './window-form/window-form.component';
   styleUrls: ['window.component.scss'],
 })
 export class WindowComponent {
-
-  @ViewChild('contentTemplate', { static: true }) contentTemplate: TemplateRef<any>;
-  @ViewChild('disabledEsc', { read: TemplateRef, static: true }) disabledEscTemplate: TemplateRef<HTMLElement>;
+  @ViewChild('contentTemplate', { static: true })
+  contentTemplate: TemplateRef<any>;
+  @ViewChild('disabledEsc', { read: TemplateRef, static: true })
+  disabledEscTemplate: TemplateRef<HTMLElement>;
 
   constructor(private windowService: NbWindowService) {}
 
   openWindow(contentTemplate) {
-    this.windowService.open(
-      contentTemplate,
-      {
-        title: 'Window content from template',
-        context: {
-          text: 'some text to pass into template',
-        },
+    this.windowService.open(contentTemplate, {
+      title: 'Window content from template',
+      context: {
+        text: 'some text to pass into template',
       },
-    );
+    });
   }
 
   openWindowForm() {
@@ -31,13 +29,10 @@ export class WindowComponent {
   }
 
   openWindowWithoutBackdrop() {
-    this.windowService.open(
-      this.disabledEscTemplate,
-      {
-        title: 'Window without backdrop',
-        hasBackdrop: false,
-        closeOnEsc: false,
-      },
-    );
+    this.windowService.open(this.disabledEscTemplate, {
+      title: 'Window without backdrop',
+      hasBackdrop: false,
+      closeOnEsc: false,
+    });
   }
 }

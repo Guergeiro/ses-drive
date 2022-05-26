@@ -27,7 +27,9 @@
     "docs:serve": "compodoc -p src/tsconfig.app.json -d docs -s",
     "prepush": "npm run lint:ci",
     "release:changelog": "npm run conventional-changelog -- -p angular -i CHANGELOG.md -s",
-    "postinstall": "ngcc --properties es2015 es5 browser module main --first-only --create-ivy-entry-points --tsconfig \"./src/tsconfig.app.json\""
+    "postinstall": "ngcc --properties es2015 es5 browser module main --first-only --create-ivy-entry-points --tsconfig \"./src/tsconfig.app.json\"",
+    "format": "prettier --write \"{src,apps,libs,test}/**/*.{js,ts}\"",
+    "format:check": "prettier --check \"{src,apps,libs,test}/**/*.{js,ts}\""
   },
   "dependencies": {
     "@angular/animations": "^12.2.16",
@@ -65,6 +67,7 @@
     "node-sass": "^7.0.1",
     "normalize.css": "6.0.0",
     "pace-js": "1.0.2",
+    "prettier": "^2.6.2",
     "roboto-fontface": "0.8.0",
     "rxjs": "6.6.2",
     "rxjs-compat": "6.3.0",

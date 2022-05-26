@@ -7,6 +7,5 @@ import { NewsPost } from '../../news.service';
   templateUrl: 'news-post.component.html',
 })
 export class NewsPostComponent {
-
   @Input() post: NewsPost;
 }

@@ -3,14 +3,14 @@ import { NbThemeService } from '@nebular/theme';
 import { delay, takeWhile } from 'rxjs/operators';
 import { LayoutService } from '../../../../@core/utils/layout.service';
 
-
 @Component({
   selector: 'ngx-visitors-statistics',
   styleUrls: ['./visitors-statistics.component.scss'],
   templateUrl: './visitors-statistics.component.html',
 })
-export class ECommerceVisitorsStatisticsComponent implements AfterViewInit, OnDestroy {
-
+export class ECommerceVisitorsStatisticsComponent
+  implements AfterViewInit, OnDestroy
+{
   private alive = true;
 
   @Input() value: number;
@@ -19,28 +19,30 @@ export class ECommerceVisitorsStatisticsComponent implements AfterViewInit, OnDe
   chartLegend: { iconColor: string; title: string }[];
   echartsIntance: any;
 
-  constructor(private theme: NbThemeService,
-              private layoutService: LayoutService) {
-    this.layoutService.onSafeChangeLayoutSize()
-      .pipe(
-        takeWhile(() => this.alive),
-      )
+  constructor(
+    private theme: NbThemeService,
+    private layoutService: LayoutService,
+  ) {
+    this.layoutService
+      .onSafeChangeLayoutSize()
+      .pipe(takeWhile(() => this.alive))
       .subscribe(() => this.resizeChart());
   }
 
   ngAfterViewInit() {
-    this.theme.getJsTheme()
+    this.theme
+      .getJsTheme()
       .pipe(
         takeWhile(() => this.alive),
         delay(1),
       )
-      .subscribe(config => {
+      .subscribe((config) => {
         const variables: any = config.variables;
         const visitorsPieLegend: any = config.variables.visitorsPieLegend;
 
         this.setOptions(variables);
         this.setLegendItems(visitorsPieLegend);
-    });
+      });
   }
 
   setLegendItems(visitorsPieLegend) {

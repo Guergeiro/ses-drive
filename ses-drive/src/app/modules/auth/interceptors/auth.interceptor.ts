@@ -1,4 +1,4 @@
-import { Inject, Injectable, Injector } from "@angular/core";
+import { Inject, Injectable, Injector } from '@angular/core';
 import {
   HttpEvent,
   HttpHandler,
@@ -6,17 +6,17 @@ import {
   HttpInterceptor,
   HttpRequest,
   HttpResponse,
-} from "@angular/common/http";
-import { Observable, of, throwError, BehaviorSubject } from "rxjs";
-import { catchError, finalize, switchMap, filter } from "rxjs/operators";
+} from '@angular/common/http';
+import { Observable, of, throwError, BehaviorSubject } from 'rxjs';
+import { catchError, finalize, switchMap, filter } from 'rxjs/operators';
 import {
   nbAuthCreateToken,
   NbAuthSimpleToken,
   NbAuthToken,
   NbTokenService,
-} from "@nebular/auth";
-import { NbAuthService } from "@nebular/auth";
-import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from "@nebular/auth";
+} from '@nebular/auth';
+import { NbAuthService } from '@nebular/auth';
+import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -26,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private injector: Injector,
     private tokenService: NbTokenService,
-    @Inject(NB_AUTH_TOKEN_INTERCEPTOR_FILTER) protected filter
+    @Inject(NB_AUTH_TOKEN_INTERCEPTOR_FILTER) protected filterInterceptor,
   ) {
     this.blocksRequests = new BehaviorSubject<boolean>(false);
     this.blocksRequests$ = this.blocksRequests.asObservable();
@@ -34,10 +34,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     // do not intercept request whose urls are filtered by the injected filter
-    if (!this.filter(req)) {
+    if (!this.filterInterceptor(req)) {
       return this.authService.isAuthenticatedOrRefresh().pipe(
         switchMap((authenticated) => {
           if (authenticated) {
@@ -45,14 +45,14 @@ export class AuthInterceptor implements HttpInterceptor {
               switchMap((token: NbAuthToken) => {
                 const JWT = `Bearer ${token.getValue()}`;
 
-                if (req.url.includes("/api/v0/auth/sign-out")) {
+                if (req.url.includes('/api/v0/auth/sign-out')) {
                   req = req.clone({
                     body: {},
                     headers: new HttpHeaders().set(
-                      "Content-Type",
-                      "application/json"
+                      'Content-Type',
+                      'application/json',
                     ),
-                    responseType: "json",
+                    responseType: 'json',
                     withCredentials: true,
                   });
                 } else {
@@ -71,14 +71,14 @@ export class AuthInterceptor implements HttpInterceptor {
                   return throwError(error);
                 }
 
-                if (req.url.includes("api/auth/sign-in")) {
+                if (req.url.includes('api/auth/sign-in')) {
                   return throwError(error);
                 }
                 return throwError(error);
-              })
+              }),
             );
           } else {
-            if (req.url.includes("/api/v0/auth/sign-in")) {
+            if (req.url.includes('/api/v0/auth/sign-in')) {
               req = req.clone({
                 withCredentials: true,
               });
@@ -87,7 +87,7 @@ export class AuthInterceptor implements HttpInterceptor {
             // receives the 401/403 error and can act as desired ('session expired', redirect to login, aso)
             return next.handle(req);
           }
-        })
+        }),
       );
     } else {
       return next.handle(req);
@@ -100,20 +100,20 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private refreshAccessTokenAndDoRequestAgain(
     request: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ) {
     if (this.blocksRequests.value === true) {
       return this.blocksRequests$.pipe(
         filter((blocked) => blocked === false),
         switchMap(() => {
-          const authData = JSON.parse(localStorage.getItem("auth_app_token"));
+          const authData = JSON.parse(localStorage.getItem('auth_app_token'));
 
           return this.doRequestAgainWithNewCredentials(
             request,
             authData.value,
-            next
+            next,
           );
-        })
+        }),
       );
     }
 
@@ -121,9 +121,9 @@ export class AuthInterceptor implements HttpInterceptor {
     this.tokenService.clear().subscribe();
 
     const requestRefreshToken = new HttpRequest(
-      "GET",
+      'GET',
       `http://localhost:3000/api/v0/auth/refresh`,
-      { withCredentials: true }
+      { withCredentials: true },
     );
 
     return next.handle(requestRefreshToken).pipe(
@@ -136,7 +136,7 @@ export class AuthInterceptor implements HttpInterceptor {
             const token = nbAuthCreateToken(
               NbAuthSimpleToken,
               body.accessToken,
-              "email"
+              'email',
             );
 
             this.tokenService.set(token).subscribe();
@@ -144,10 +144,10 @@ export class AuthInterceptor implements HttpInterceptor {
             return this.doRequestAgainWithNewCredentials(
               request,
               body.accessToken,
-              next
+              next,
             );
           } else {
-            throw new Error("Access Token not provided");
+            throw new Error('Access Token not provided');
           }
         } else {
           return of(event);
@@ -160,14 +160,14 @@ export class AuthInterceptor implements HttpInterceptor {
 
       catchError((error) => {
         return throwError(error);
-      })
+      }),
     );
   }
 
   private doRequestAgainWithNewCredentials(
     request: HttpRequest<unknown>,
     accessToken: string,
-    next: HttpHandler
+    next: HttpHandler,
   ) {
     const clonedRequest = request.clone({
       setHeaders: {
@@ -178,7 +178,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(clonedRequest).pipe(
       catchError((error) => {
         return throwError(error);
-      })
+      }),
     );
   }
 }

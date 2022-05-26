@@ -7,13 +7,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['stepper.component.scss'],
 })
 export class StepperComponent implements OnInit {
-
   firstForm: FormGroup;
   secondForm: FormGroup;
   thirdForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
     this.firstForm = this.fb.group({

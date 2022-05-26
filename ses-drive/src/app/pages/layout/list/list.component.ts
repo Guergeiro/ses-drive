@@ -9,7 +9,7 @@ import { fruits } from './fruits-list';
 export class ListComponent {
   fruits = fruits;
 
-  users: { name: string, title: string }[] = [
+  users: { name: string; title: string }[] = [
     { name: 'Carla Espinosa', title: 'Nurse' },
     { name: 'Bob Kelso', title: 'Doctor of Medicine' },
     { name: 'Janitor', title: 'Janitor' },

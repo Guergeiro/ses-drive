@@ -66,4 +66,4 @@ import { FormsModule } from '@angular/forms';
     TrafficChartComponent,
   ],
 })
-export class DashboardModule { }
+export class DashboardModule {}
