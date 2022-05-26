@@ -14,9 +14,11 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
     ></div>
   `,
 })
+// tslint:disable:one-line
 export class StatsBarAnimationChartComponent
   implements AfterViewInit, OnDestroy
 {
+  // tslint:enable:one-line
   private alive = true;
 
   @Input() linesData: { firstLine: number[]; secondLine: number[] } = {

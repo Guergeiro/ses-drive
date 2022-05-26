@@ -24,9 +24,11 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
     ></div>
   `,
 })
+// tslint:disable:one-line
 export class OrdersChartComponent
   implements AfterViewInit, OnDestroy, OnChanges
 {
+  // tslint:enable:one-line
   @Input()
   ordersChartData: OrdersChart;
 

@@ -21,9 +21,11 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
     ></div>
   `,
 })
+// tslint:disable:one-line
 export class EarningLiveUpdateChartComponent
   implements AfterViewInit, OnDestroy, OnChanges
 {
+  // tslint:enable:one-line
   private alive = true;
 
   @Input() liveUpdateChartData: { value: [string, number] }[];

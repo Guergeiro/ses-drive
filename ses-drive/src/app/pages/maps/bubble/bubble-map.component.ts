@@ -508,7 +508,7 @@ export class BubbleMapComponent implements OnDestroy {
           },
           {
             code: 'CI',
-            name: "Cote d'Ivoire",
+            name: `Cote d'Ivoire`,
             value: 20152894,
             color: this.getRandomGeoColor(),
           },

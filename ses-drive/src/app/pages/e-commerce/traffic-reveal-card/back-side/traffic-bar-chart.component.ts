@@ -23,9 +23,11 @@ declare const echarts: any;
     ></div>
   `,
 })
+// tslint:disable:one-line
 export class TrafficBarChartComponent
   implements AfterViewInit, OnDestroy, OnChanges
 {
+  // tslint:enable:one-line
   @Input() data: number[];
   @Input() labels: string[];
   @Input() formatter: string;

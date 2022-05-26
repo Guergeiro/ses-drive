@@ -23,9 +23,11 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
     ></div>
   `,
 })
+// tslint:disable:one-line
 export class ProfitChartComponent
   implements AfterViewInit, OnDestroy, OnChanges
 {
+  // tslint:enable:one-line
   @Input()
   profitChartData: ProfitChart;
 

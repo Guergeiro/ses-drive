@@ -17,9 +17,11 @@ import { OutlineData } from '../../../../@core/data/visitors-analytics';
     ></div>
   `,
 })
+// tslint:disable:one-line
 export class ECommerceVisitorsAnalyticsChartComponent
   implements AfterViewInit, OnDestroy
 {
+  // tslint:enable:one-line
   private alive = true;
 
   @Input() chartData: {

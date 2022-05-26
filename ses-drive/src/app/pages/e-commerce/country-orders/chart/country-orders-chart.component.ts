@@ -26,9 +26,11 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
     ></div>
   `,
 })
+// tslint:disable:one-line
 export class CountryOrdersChartComponent
   implements AfterViewInit, OnDestroy, OnChanges
 {
+  // tslint:enable:one-line
   @Input() countryName: string;
   @Input() data: number[];
   @Input() maxValue: number;

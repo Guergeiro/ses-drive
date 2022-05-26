@@ -8,9 +8,11 @@ import { LayoutService } from '../../../../@core/utils/layout.service';
   styleUrls: ['./visitors-statistics.component.scss'],
   templateUrl: './visitors-statistics.component.html',
 })
+// tslint:disable:one-line
 export class ECommerceVisitorsStatisticsComponent
   implements AfterViewInit, OnDestroy
 {
+  // tslint:enable:one-line
   private alive = true;
 
   @Input() value: number;
