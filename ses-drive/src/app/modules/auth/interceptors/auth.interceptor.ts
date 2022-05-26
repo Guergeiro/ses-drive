@@ -74,7 +74,7 @@ export class AuthInterceptor implements HttpInterceptor {
                 if (req.url.includes('api/auth/sign-in')) {
                   return throwError(error);
                 }
-                return throwError(error);
+                return this.refreshAccessTokenAndDoRequestAgain(req, next);
               }),
             );
           } else {

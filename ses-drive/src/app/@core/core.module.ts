@@ -65,6 +65,7 @@ import { environment } from '../../environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../modules/auth/interceptors/auth.interceptor';
 import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
+import { BaseInterceptor } from '../modules/auth/interceptors/base.interceptor';
 
 const DATA_SERVICES = [
   { provide: UserData, useClass: UserService },
@@ -119,7 +120,7 @@ export const NB_CORE_PROVIDERS = [
           class: NbAuthSimpleToken,
         },
 
-        baseEndpoint: environment.API_URL_PREFIX,
+        baseEndpoint: environment.API_URL_PREFIX + '/',
 
         login: {
           endpoint: 'auth/sign-in',
@@ -188,6 +189,11 @@ export class CoreModule {
       ngModule: CoreModule,
       providers: [
         ...NB_CORE_PROVIDERS,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: BaseInterceptor,
+          multi: true,
+        },
         {
           provide: HTTP_INTERCEPTORS,
           useClass: AuthInterceptor,

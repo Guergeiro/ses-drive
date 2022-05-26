@@ -6,10 +6,11 @@ import {
   NbThemeService,
 } from '@nebular/theme';
 
-import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { MeService } from '../../../services/me/me.service';
+import { User } from '../../../types/User';
 
 @Component({
   selector: 'ngx-header',
@@ -19,7 +20,7 @@ import { Subject } from 'rxjs';
 export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
-  user: any;
+  user: User;
 
   themes = [
     {
@@ -48,18 +49,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private userService: UserData,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService,
+    private readonly meService: MeService,
   ) {}
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.userService
-      .getUsers()
+    this.meService
+      .me()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => (this.user = users.nick));
+      .subscribe((user: User) => (this.user = user));
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService
