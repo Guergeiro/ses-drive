@@ -1,3 +1,5 @@
+import { yellow } from "../../deps.ts";
+
 export type FileSystem = {
   id: string;
   fullpath: string;
@@ -11,5 +13,5 @@ export type Directory = FileSystem & {
 };
 
 export function printFileSystem(data: FileSystem) {
-  return `${data.id} - ${data.fullpath}`;
+  return `${yellow(data.id)} - ${data.fullpath}`;
 }
