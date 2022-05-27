@@ -14,6 +14,17 @@
   <nb-card-body>
     <div class="row">
       <div class="col-12">
+        <div class="d-flex align-items-center">
+          <ng-container *ngFor="let item of this.breadcrumb; let i = index;">
+            <p class="link" (click)="this.getDirectories(this.getPath(i))">{{item}}</p>
+            <p class="font-weight-bold">&nbsp;/&nbsp;</p>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-12">
         <h4 class="label">Folders</h4>
 
         <div class="row" *ngIf="this.directory">

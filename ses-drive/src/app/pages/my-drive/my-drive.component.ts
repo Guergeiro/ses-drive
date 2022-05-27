@@ -22,6 +22,8 @@ export class MyDriveComponent implements OnInit, OnDestroy {
     { title: 'Folder', icon: 'folder-add' },
   ];
 
+  breadcrumb = [];
+
   directory: Directory;
   curPath: string;
 
@@ -55,6 +57,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
         tap((res) => {
           this.directory = res;
           this.curPath = res.fullpath;
+          this.handleBreadcumb();
         }),
         finalize(() => {
           this.loading = false;
@@ -68,6 +71,16 @@ export class MyDriveComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.subscriptions.push(sub);
+  }
+
+  handleBreadcumb() {
+    const auxPath = this.curPath.split('/').slice(1);
+
+    this.breadcrumb = [auxPath.slice(0, 2).join('/'), ...auxPath.slice(2)];
+  }
+
+  getPath(index: number) {
+    return '/' + this.breadcrumb.slice(0, index + 1).join('/');
   }
 
   ngOnDestroy() {
