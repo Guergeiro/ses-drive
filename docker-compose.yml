@@ -39,7 +39,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
-    container_name: gdrive_backend
+    container_name: backend
     volumes:
       - ./backend/src:/usr/src/app/src
     environment:
@@ -52,9 +52,23 @@ services:
       AWS_REGION: us-east-1
       AWS_ACCESS_KEY: test
       AWS_SECRET_KEY: test
-      APP_URL: localhost
     depends_on:
       - localstack
       - setup-resources
     ports:
       - "3000:3000"
+  frontend:
+    build:
+      context: ./ses-drive
+      dockerfile: Dockerfile.dev
+    container_name: frontend
+    volumes:
+      - ./ses-drive/src:/usr/src/app/src
+    environment:
+      PORT: 4200
+    depends_on:
+      - localstack
+      - setup-resources
+      - backend
+    ports:
+      - "4200:4200"
