@@ -1,0 +1,13 @@
+FROM guergeiro/pnpm:16 as cache
+WORKDIR /usr/src/app
+COPY package.json .
+RUN pnpm install --shamefully-hoist
+
+FROM guergeiro/pnpm:16
+WORKDIR /usr/src/app
+COPY . .
+RUN rm -rdf node_modules
+COPY --from=cache /usr/src/app .
+
+ENV PORT $PORT
+CMD pnpm exec ng serve --port $PORT --host 0.0.0.0 --disable-host-check
