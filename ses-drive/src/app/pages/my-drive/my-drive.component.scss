@@ -6,3 +6,13 @@
     background: #f3f4f6;
   }
 }
+
+.link {
+  cursor:pointer;
+
+  &:hover {
+    text-decoration: underline;
+
+    transition: all 0.2s;
+  }
+}

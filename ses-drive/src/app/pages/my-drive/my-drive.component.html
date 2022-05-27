@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
   <nb-card-header class="d-flex align-items-center justify-content-between">
     My Drive
     <button
@@ -14,14 +14,30 @@
   <nb-card-body>
     <div class="row">
       <div class="col-12">
+        <div class="d-flex align-items-center">
+          <ng-container *ngFor="let item of this.breadcrumb; let i = index;">
+            <p class="link" (click)="this.getDirectories(this.getPath(i))">{{item}}</p>
+            <p class="font-weight-bold">&nbsp;/&nbsp;</p>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-12">
         <h4 class="label">Folders</h4>
 
-        <div class="row">
-          <div class="col-sm-6 col-md-3 mb-2" *ngFor="let item of [1,2,3,4,5,6,7,8,9,10];">
-            <div class="d-flex shadow-sm rounded-lg justify-content-center align-items-center border p-2 folder">
+        <div class="row" *ngIf="this.directory">
+          <div class="col-sm-6 col-md-3 mb-2" *ngFor="let folder of this.directory.folders;">
+            <div class="d-flex shadow-sm rounded-lg justify-content-center align-items-center border p-2 folder" (click)="this.getDirectories(folder.fullpath)">
               <nb-icon icon="folder" class="mr-2"></nb-icon>
-              <p class="paragraph m-0">Ação Social {{ item }}</p>
+              <p class="paragraph m-0">{{ folder.name }}</p>
             </div>
+          </div>
+          <div class="col-12" *ngIf="this.directory.folders.length === 0">
+            <p class="paragraph m-0 text-center">
+              No folders yet.
+            </p>
           </div>
         </div>
       </div>
@@ -31,12 +47,17 @@
       <div class="col-12">
         <h4 class="label">Files</h4>
 
-        <div class="row">
-          <div class="col-sm-6 col-md-3 mb-2" *ngFor="let item of [1,2,3,4,5];">
+        <div class="row" *ngIf="this.directory">
+          <div class="col-sm-6 col-md-3 mb-2" *ngFor="let file of this.directory.files;">
             <div class="d-flex shadow-sm rounded-lg justify-content-center align-items-center border p-2 folder">
               <nb-icon icon="file" class="mr-2"></nb-icon>
-              <p class="paragraph m-0">Ficheiro {{ item }}</p>
+              <p class="paragraph m-0">{{ file.name }}</p>
             </div>
+          </div>
+          <div class="col-12" *ngIf="this.directory.files.length === 0">
+            <p class="paragraph m-0 text-center">
+              No files yet.
+            </p>
           </div>
         </div>
       </div>
