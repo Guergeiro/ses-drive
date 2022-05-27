@@ -9,14 +9,14 @@ services:
       - SERVICES=s3,sqs
       - DEBUG=${DEBUG-1}
       - DATA_DIR=${DATA_DIR-}
-      - HOST_TMP_FOLDER=${TMPDIR:-/tmp/}localstack
+      - HOST_TMP_FOLDER=${TMPDIR:-/opt/}localstack
       - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR-}
       - LAMBDA_DOCKER_NETWORK=gdrive_default
       - DOCKER_HOST=unix:///var/run/docker.sock
       - HOSTNAME=0.0.0.0
       - HOSTNAME_EXTERNAL=0.0.0.0
     volumes:
-      - "${TMPDIR:-/tmp}/localstack:/tmp/localstack"
+      - "${TMPDIR:-/opt}/localstack:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
   setup-resources:
     image: mesosphere/aws-cli

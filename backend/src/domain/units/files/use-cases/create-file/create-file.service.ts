@@ -1,7 +1,7 @@
 import { Directory } from "@entities/directory.entity";
 import { File } from "@entities/file.entity";
 import { User } from "@entities/user.entity";
-import { EntityRepository } from "@mikro-orm/mongodb";
+import { EntityRepository, ObjectId } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable, UnsupportedMediaTypeException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
@@ -40,6 +40,7 @@ export class CreateFileService {
         owner: user,
       });
       const fileObj = this.filesRepository.create({
+        _id: new ObjectId(),
         fullpath: `${directory.fullpath}/${originalname}`,
         owner: user,
         mimetype: mimetype,
