@@ -57,18 +57,18 @@ services:
       - setup-resources
     ports:
       - "3000:3000"
-  frontend:
-    build:
-      context: ./ses-drive
-      dockerfile: Dockerfile.dev
-    container_name: frontend
-    volumes:
-      - ./ses-drive/src:/usr/src/app/src
-    environment:
-      PORT: 4200
-    depends_on:
-      - localstack
-      - setup-resources
-      - backend
-    ports:
-      - "4200:4200"
+  # frontend:
+  #   build:
+  #     context: ./ses-drive
+  #     dockerfile: Dockerfile.dev
+  #   container_name: frontend
+  #   volumes:
+  #     - ./ses-drive/src:/usr/src/app/src
+  #   environment:
+  #     PORT: 4200
+  #   depends_on:
+  #     - localstack
+  #     - setup-resources
+  #     - backend
+  #   ports:
+  #     - "4200:4200"

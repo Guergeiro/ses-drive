@@ -5,11 +5,12 @@ import {
   ChangeDetectorRef,
   ErrorHandler,
 } from '@angular/core';
-import { NbMenuService } from '@nebular/theme';
+import { NbDialogService, NbMenuService } from '@nebular/theme';
 import { filter, map, tap, finalize, catchError } from 'rxjs/operators';
 import { DirectoriesService } from '../../services/directories/directories.service';
 import { Subscription, of } from 'rxjs';
 import { Directory } from '../../types/Directory';
+import { AddFolderDialogComponent } from '../../components/dialogs/add-folder-dialog/add-folder-dialog.component';
 
 @Component({
   selector: 'ngx-my-drive',
@@ -35,6 +36,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
     private readonly directoriesService: DirectoriesService,
     private readonly cdr: ChangeDetectorRef,
     private readonly handleError: ErrorHandler,
+    private readonly dialogService: NbDialogService,
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +48,16 @@ export class MyDriveComponent implements OnInit, OnDestroy {
         filter(({ tag }) => tag === 'my-context-menu'),
         map(({ item: { title } }) => title),
       )
-      .subscribe((title) => alert(`${title} was clicked!`));
+      .subscribe((title) => {
+        if (title === 'File') {
+          // something
+          return;
+        }
+
+        if (title === 'Folder') {
+          this.createFolder();
+        }
+      });
   }
 
   getDirectories(path?: string) {
@@ -73,9 +84,38 @@ export class MyDriveComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
+  createFolder() {
+    this.dialogService
+      .open(AddFolderDialogComponent)
+      .onClose.subscribe((name) => {
+        if (name == null || name === '') {
+          return;
+        }
+
+        this.loading = true;
+        const sub = this.directoriesService
+          .create(name, this.curPath)
+          .pipe(
+            tap((res) => {
+              this.getDirectories(this.curPath);
+            }),
+            finalize(() => {
+              this.loading = false;
+              this.cdr.markForCheck();
+            }),
+            catchError((err) => {
+              this.handleError.handleError(err);
+              return of(null);
+            }),
+          )
+          .subscribe();
+
+        this.subscriptions.push(sub);
+      });
+  }
+
   handleBreadcumb() {
     const auxPath = this.curPath.split('/').slice(1);
-
     this.breadcrumb = [auxPath.slice(0, 2).join('/'), ...auxPath.slice(2)];
   }
 
