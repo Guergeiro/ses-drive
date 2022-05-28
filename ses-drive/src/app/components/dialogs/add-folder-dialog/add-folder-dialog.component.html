@@ -1,0 +1,11 @@
+<nb-card>
+  <nb-card-header>Create Folder</nb-card-header>
+  <nb-card-body>
+    <h4 class="label">Folder Name:</h4>
+    <input #name nbInput placeholder="Name">
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-around align-items-center">
+    <button class="cancel" nbButton status="basic" (click)="cancel()">Cancel</button>
+    <button nbButton status="primary" (click)="submit(name.value)">Save</button>
+  </nb-card-footer>
+</nb-card>
