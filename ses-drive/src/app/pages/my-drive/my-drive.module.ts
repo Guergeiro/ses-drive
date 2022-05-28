@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MyDriveComponent } from './my-drive.component';
 import { MyDriveRoutingModule } from './my-drive-routing.module';
+import { FolderComponent } from '../../components/folder/folder.component';
 import {
   NbCardModule,
   NbIconModule,
@@ -20,6 +21,6 @@ import {
     NbContextMenuModule,
     NbSpinnerModule,
   ],
-  declarations: [MyDriveComponent],
+  declarations: [MyDriveComponent, FolderComponent],
 })
 export class MyDriveModule {}

@@ -27,10 +27,7 @@
 
         <div class="row" *ngIf="this.directory">
           <div class="col-sm-6 col-md-3 mb-2" *ngFor="let folder of this.directory.folders;">
-            <div class="d-flex shadow-sm rounded-lg justify-content-center align-items-center border p-2 folder" (click)="this.getDirectories(folder.fullpath)">
-              <nb-icon icon="folder" class="mr-2"></nb-icon>
-              <p class="paragraph m-0">{{ folder.name }}</p>
-            </div>
+            <ngx-folder [folder]="folder" (newChangeDirectory)="getDirectories($event)"></ngx-folder>
           </div>
           <div class="col-12" *ngIf="this.directory.folders.length === 0">
             <p class="paragraph m-0 text-center">
