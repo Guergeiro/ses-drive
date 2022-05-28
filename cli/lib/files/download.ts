@@ -11,7 +11,7 @@ export const download = new Command().description("Download a file")
       id: string,
       destination?: string,
     ) {
-      const res = await fetch(`${apiurl}/files/${id}`, {
+      const res = await fetch(`${apiurl}/files/${id}/ops-download`, {
         headers: headers(key, false),
       });
 

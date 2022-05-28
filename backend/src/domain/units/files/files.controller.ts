@@ -87,7 +87,7 @@ export class FilesController {
     return this.getFilesStatusService.execute(user);
   }
 
-  @Get(":id")
+  @Get(":id/ops/download")
   public async downloadFile(
     @Req() request: Request,
     @Param("id") id: string,
