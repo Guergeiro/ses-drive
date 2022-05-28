@@ -8,6 +8,7 @@ import {
   HostListener,
   ErrorHandler,
   ChangeDetectorRef,
+  OnDestroy,
 } from '@angular/core';
 import {
   NbContextMenuDirective,
@@ -25,7 +26,7 @@ import { YesOrNoDialogComponent } from '../dialogs/yes-or-no-dialog/yes-or-no-di
   templateUrl: './folder.component.html',
   styleUrls: ['./folder.component.scss'],
 })
-export class FolderComponent implements OnInit {
+export class FolderComponent implements OnInit, OnDestroy {
   @Input() folder: Folder;
   @ViewChild(NbContextMenuDirective) contextMenu: NbContextMenuDirective;
 
@@ -126,5 +127,9 @@ export class FolderComponent implements OnInit {
     }
 
     return auxPath.join('/');
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sb) => sb.unsubscribe());
   }
 }
