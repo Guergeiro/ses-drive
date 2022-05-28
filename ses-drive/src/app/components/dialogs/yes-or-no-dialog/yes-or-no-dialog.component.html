@@ -1,0 +1,10 @@
+<nb-card>
+  <nb-card-header>{{ title }}</nb-card-header>
+  <nb-card-body>
+    <p class="paragraph">{{ description }}</p>
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-center align-items-center gap-2">
+    <button class="cancel" nbButton status="basic" (click)="submit(false)" class="mr-2">No</button>
+    <button nbButton status="primary" (click)="submit(true)">Yes</button>
+  </nb-card-footer>
+</nb-card>

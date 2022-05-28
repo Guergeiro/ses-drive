@@ -1,4 +1,12 @@
-<div class="d-flex shadow-sm rounded-lg justify-content-center align-items-center border p-2 folder" (click)="this.changeDirectory(this.folder.fullpath)">
+<div class="d-flex shadow-sm rounded-lg justify-content-center align-items-center border p-2 folder"
+  (click)="this.changeDirectory(this.folder.fullpath)"
+  [nbContextMenu]="menu"
+  nbContextMenuTag="folder-submenu-{{this.folder.id}}"
+  nbContextMenuTrigger="noop"
+  nbContextMenuPlacement="right"
+  (contextmenu)="open()"
+  [nbSpinner]="loading"
+  nbSpinnerStatus="primary">
   <nb-icon icon="folder" class="mr-2"></nb-icon>
   <p class="paragraph m-0">{{ this.folder.name }}</p>
 </div>

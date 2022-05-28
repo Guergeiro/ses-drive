@@ -13,6 +13,7 @@ import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { AddFolderDialogComponent } from '../components/dialogs/add-folder-dialog/add-folder-dialog.component';
+import { YesOrNoDialogComponent } from '../components/dialogs/yes-or-no-dialog/yes-or-no-dialog.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,11 @@ import { AddFolderDialogComponent } from '../components/dialogs/add-folder-dialo
     NbButtonModule,
     NbInputModule,
   ],
-  declarations: [PagesComponent, AddFolderDialogComponent],
-  entryComponents: [AddFolderDialogComponent],
+  declarations: [
+    PagesComponent,
+    AddFolderDialogComponent,
+    YesOrNoDialogComponent,
+  ],
+  entryComponents: [AddFolderDialogComponent, YesOrNoDialogComponent],
 })
 export class PagesModule {}
