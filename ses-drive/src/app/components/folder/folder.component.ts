@@ -20,6 +20,7 @@ import { DirectoriesService } from '../../services/directories/directories.servi
 import { Folder } from '../../types/Folder';
 import { Subscription, of } from 'rxjs';
 import { YesOrNoDialogComponent } from '../dialogs/yes-or-no-dialog/yes-or-no-dialog.component';
+import { RenameDialogComponent } from '../dialogs/rename-dialog/rename-dialog.component';
 
 @Component({
   selector: 'ngx-folder',
@@ -49,7 +50,7 @@ export class FolderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.nbMenuService
+    const subs = this.nbMenuService
       .onItemClick()
       .pipe(
         filter(({ tag }) => tag === `folder-submenu-${this.folder.id}`),
@@ -57,7 +58,7 @@ export class FolderComponent implements OnInit, OnDestroy {
       )
       .subscribe((title) => {
         if (title === 'Rename') {
-          // something
+          this.renameFolder();
           return;
         }
 
@@ -65,10 +66,50 @@ export class FolderComponent implements OnInit, OnDestroy {
           this.deleteFolder();
         }
       });
+
+    this.subscriptions.push(subs);
   }
 
   changeDirectory(path: string) {
     this.newChangeDirectory.emit(path);
+  }
+
+  renameFolder() {
+    this.dialogService
+      .open(RenameDialogComponent, {
+        closeOnBackdropClick: false,
+        context: {
+          title: 'Rename Folder',
+          currentName: this.folder.name,
+        },
+      })
+      .onClose.subscribe((name) => {
+        if (name == null || name === '') {
+          return;
+        }
+
+        this.loading = true;
+        const sub = this.directoriesService
+          .rename(this.folder.id, name)
+          .pipe(
+            tap((res) => {
+              this.newChangeDirectory.emit(
+                this.buildParentPath(this.folder.fullpath),
+              );
+            }),
+            finalize(() => {
+              this.loading = false;
+              this.cdr.markForCheck();
+            }),
+            catchError((err) => {
+              this.handleError.handleError(err);
+              return of(null);
+            }),
+          )
+          .subscribe();
+
+        this.subscriptions.push(sub);
+      });
   }
 
   deleteFolder() {

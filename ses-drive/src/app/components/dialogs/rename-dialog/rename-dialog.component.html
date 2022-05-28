@@ -1,0 +1,15 @@
+<nb-card>
+  <nb-card-header>{{ title }}</nb-card-header>
+  <nb-card-body>
+    <h4 class="label">Current Name:</h4>
+    <div class="alert alert-secondary p-2">
+      {{currentName}}
+    </div>
+    <h4 class="label">New Name:</h4>
+    <input #name nbInput placeholder="Name">
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-around align-items-center">
+    <button class="cancel" nbButton status="basic" (click)="cancel()">Cancel</button>
+    <button nbButton status="primary" (click)="submit(name.value)">Save</button>
+  </nb-card-footer>
+</nb-card>
