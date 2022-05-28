@@ -8,9 +8,8 @@ describe('AddFolderDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddFolderDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [AddFolderDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
