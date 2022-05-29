@@ -12,4 +12,8 @@ export class MeService {
   me() {
     return this.http.get<User>(this.URL);
   }
+
+  refreshApiKey() {
+    return this.http.patch(`${this.URL}/ops/generate-api-key`, {});
+  }
 }
