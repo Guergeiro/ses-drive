@@ -12,7 +12,7 @@ export class FilesService {
 
   upload(destination: string, files: File[]) {
     const formData = new FormData();
-    for (let file of files) {
+    for (const file of files) {
       formData.append(destination, file);
     }
 
