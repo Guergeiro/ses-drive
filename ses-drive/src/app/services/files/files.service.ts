@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { FileUpload } from '../../types/FileUpload';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,12 @@ export class FilesService {
     const formData = new FormData();
     formData.append(destination, file);
 
-    return this.http.post<any>(this.API_URL, formData);
+    return this.http.post<FileUpload>(this.API_URL, formData);
+  }
+
+  download(id: string) {
+    return this.http.get<Blob>(`${this.API_URL}/${id}/ops/download`, {
+      responseType: 'blob' as 'json',
+    });
   }
 }

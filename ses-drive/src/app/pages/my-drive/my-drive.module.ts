@@ -10,6 +10,7 @@ import {
   NbButtonModule,
   NbContextMenuModule,
   NbSpinnerModule,
+  NbToastrModule,
 } from '@nebular/theme';
 
 @NgModule({
@@ -21,6 +22,7 @@ import {
     NbButtonModule,
     NbContextMenuModule,
     NbSpinnerModule,
+    NbToastrModule,
   ],
   declarations: [MyDriveComponent, FolderComponent, FileComponent],
 })

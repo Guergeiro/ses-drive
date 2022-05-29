@@ -1,6 +1,7 @@
 <div class="d-flex shadow-sm rounded-lg justify-content-center align-items-center border p-2 file"
   [nbSpinner]="loading"
-  nbSpinnerStatus="primary">
+  nbSpinnerStatus="primary"
+  (click)="this.downloadFile()">
   <nb-icon icon="file" class="mr-2"></nb-icon>
   <p class="paragraph m-0">{{ this.file.name | slice:0:15 }}{{ this.file.name.length > 15 ? '...' : '' }}</p>
 </div>
