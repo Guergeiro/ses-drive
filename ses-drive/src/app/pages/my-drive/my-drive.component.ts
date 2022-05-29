@@ -11,6 +11,7 @@ import { DirectoriesService } from '../../services/directories/directories.servi
 import { Subscription, of } from 'rxjs';
 import { Directory } from '../../types/Directory';
 import { AddFolderDialogComponent } from '../../components/dialogs/add-folder-dialog/add-folder-dialog.component';
+import { AddFileDialogComponent } from '../../components/dialogs/add-file-dialog/add-file-dialog.component';
 
 @Component({
   selector: 'ngx-my-drive',
@@ -50,7 +51,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
       )
       .subscribe((title) => {
         if (title === 'File') {
-          // something
+          this.createFile();
           return;
         }
 
@@ -84,9 +85,25 @@ export class MyDriveComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
+  createFile() {
+    this.dialogService
+      .open(AddFileDialogComponent, {
+        closeOnBackdropClick: false,
+        context: {
+          destination: this.curPath,
+        },
+      })
+      .onClose.subscribe((success) => {
+        if (success) {
+          this.getDirectories(this.curPath);
+          return;
+        }
+      });
+  }
+
   createFolder() {
     this.dialogService
-      .open(AddFolderDialogComponent)
+      .open(AddFolderDialogComponent, { closeOnBackdropClick: false })
       .onClose.subscribe((name) => {
         if (name == null || name === '') {
           return;
