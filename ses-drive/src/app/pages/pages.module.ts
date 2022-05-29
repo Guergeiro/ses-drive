@@ -4,6 +4,7 @@ import {
   NbCardModule,
   NbButtonModule,
   NbInputModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
@@ -15,6 +16,8 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { AddFolderDialogComponent } from '../components/dialogs/add-folder-dialog/add-folder-dialog.component';
 import { YesOrNoDialogComponent } from '../components/dialogs/yes-or-no-dialog/yes-or-no-dialog.component';
 import { RenameDialogComponent } from '../components/dialogs/rename-dialog/rename-dialog.component';
+import { AddFileDialogComponent } from '../components/dialogs/add-file-dialog/add-file-dialog.component';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 @NgModule({
   imports: [
@@ -27,14 +30,18 @@ import { RenameDialogComponent } from '../components/dialogs/rename-dialog/renam
     NbCardModule,
     NbButtonModule,
     NbInputModule,
+    NgxFileDropModule,
+    NbSpinnerModule,
   ],
   declarations: [
     PagesComponent,
+    AddFileDialogComponent,
     AddFolderDialogComponent,
     YesOrNoDialogComponent,
     RenameDialogComponent,
   ],
   entryComponents: [
+    AddFileDialogComponent,
     AddFolderDialogComponent,
     YesOrNoDialogComponent,
     RenameDialogComponent,

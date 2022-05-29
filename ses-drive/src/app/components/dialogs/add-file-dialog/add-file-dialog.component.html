@@ -1,0 +1,32 @@
+<nb-card style="width: 640px;" [nbSpinner]="loading" nbSpinnerStatus="primary">
+  <nb-card-header>Add File/s</nb-card-header>
+  <nb-card-body>
+    <h4 class="label">File/s:</h4>
+    <div class="center">
+      <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)" [disabled]="this.loading">
+          <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+            Upload your files...
+            <button type="button" nbButton (click)="openFileSelector()" class="ml-3">Browse Files</button>
+          </ng-template>
+      </ngx-file-drop>
+      <div class="upload-table">
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>Name</th>
+                  </tr>
+              </thead>
+              <tbody class="upload-name-style">
+                  <tr *ngFor="let item of files; let i=index">
+                      <td><strong>{{ item.relativePath }}</strong></td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-around align-items-center">
+    <button class="cancel" nbButton status="basic" (click)="cancel()" [disabled]="this.loading">Cancel</button>
+    <button nbButton status="primary" (click)="upload()" [disabled]="this.loading">Upload</button>
+  </nb-card-footer>
+</nb-card>
