@@ -1,5 +1,5 @@
 import { Component, ErrorHandler, OnDestroy } from '@angular/core';
-import { NbDialogRef } from '@nebular/theme';
+import { NbDialogRef, NbToastrService } from '@nebular/theme';
 import { NgxFileDropEntry, FileSystemFileEntry } from 'ngx-file-drop';
 import { environment } from '../../../../environments/environment';
 import { FilesService } from '../../../services/files/files.service';
@@ -15,8 +15,7 @@ export class AddFileDialogComponent implements OnDestroy {
   URL = `${environment.API_URL_PREFIX}/files`;
   destination: string;
 
-  public files: NgxFileDropEntry[] = [];
-  uploadObjects = {};
+  public files: File[] = [];
 
   loading = false;
 
@@ -26,6 +25,7 @@ export class AddFileDialogComponent implements OnDestroy {
     protected ref: NbDialogRef<AddFileDialogComponent>,
     private readonly filesService: FilesService,
     private readonly handleError: ErrorHandler,
+    private readonly toastService: NbToastrService,
   ) {}
 
   public dropped(files: NgxFileDropEntry[]) {
@@ -33,15 +33,24 @@ export class AddFileDialogComponent implements OnDestroy {
       return;
     }
 
-    this.files = files;
+    if (this.files.length === 10 || files.length > 10) {
+      this.toastService.show('Maximum 10 files.', 'Error', {
+        status: 'danger',
+      });
+      return;
+    }
+
     for (const droppedFile of files) {
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
-          this.uploadObjects[file.name] = this.filesService.upload(
-            this.destination,
-            file,
-          );
+          if (this.isFileSizeAllowed(file.size)) {
+            this.files.push(file);
+          } else {
+            this.toastService.show('Maximum size accepted is 10MB.', 'Error', {
+              status: 'danger',
+            });
+          }
         });
       }
     }
@@ -53,7 +62,8 @@ export class AddFileDialogComponent implements OnDestroy {
     }
 
     this.loading = true;
-    const sub = forkJoin(this.uploadObjects)
+    const sub = this.filesService
+      .upload(this.destination, this.files)
       .pipe(
         tap((result) => {
           if (result) {
@@ -72,6 +82,10 @@ export class AddFileDialogComponent implements OnDestroy {
       .subscribe();
 
     this.subscriptions.push(sub);
+  }
+
+  private isFileSizeAllowed(size: number) {
+    return size < 10 * 1024 * 1024;
   }
 
   cancel() {

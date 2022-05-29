@@ -10,16 +10,18 @@ export class FilesService {
 
   constructor(private http: HttpClient) {}
 
-  upload(destination: string, file: File) {
+  upload(destination: string, files: File[]) {
     const formData = new FormData();
-    formData.append(destination, file);
+    for (let file of files) {
+      formData.append(destination, file);
+    }
 
-    return this.http.post<FileUpload>(this.API_URL, formData);
+    return this.http.post<FileUpload[]>(this.API_URL, formData);
   }
 
   download(id: string) {
-    return this.http.get<Blob>(`${this.API_URL}/${id}/ops/download`, {
-      responseType: 'blob' as 'json',
+    return this.http.get(`${this.API_URL}/${id}/ops/download`, {
+      responseType: 'blob',
     });
   }
 }
