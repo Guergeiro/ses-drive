@@ -17,7 +17,11 @@ export class GetFilesService {
   }
 
   public async execute({ path, name }: GetFilesDto, user: User) {
-    const fileFilters: FindOptions<File>["filters"] = {};
+    const fileFilters: FindOptions<File>["filters"] = {
+      CASL_READ: {
+        user: user,
+      },
+    };
     if (path != null) {
       fileFilters.path = {
         path: path,
@@ -29,10 +33,7 @@ export class GetFilesService {
       };
     }
 
-    const files = await this.filesRepository.find(
-      { owner: user },
-      { filters: fileFilters },
-    );
+    const files = await this.filesRepository.findAll({ filters: fileFilters });
     return files;
   }
 }

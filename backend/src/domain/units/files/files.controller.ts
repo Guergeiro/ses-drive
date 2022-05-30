@@ -2,9 +2,11 @@ import { User } from "@entities/user.entity";
 import { UserDecorator } from "@generics/User.decorator";
 import { BothAuthGuard } from "@guards/both-auth.guard";
 import {
+  Body,
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -30,6 +32,8 @@ import { DownloadFileService } from "./use-cases/download-file/download-file.ser
 import { GetFilesStatusService } from "./use-cases/get-files-status/get-files-status.service";
 import { GetFilesDto } from "./use-cases/get-files/get-files.dto";
 import { GetFilesService } from "./use-cases/get-files/get-files.service";
+import { ShareFileDto } from "./use-cases/share-file/share-file.dto";
+import { ShareFileService } from "./use-cases/share-file/share-file.service";
 
 @ApiTags("files")
 @ApiSecurity("x-api-key")
@@ -41,17 +45,20 @@ export class FilesController {
   private readonly getFilesService: GetFilesService;
   private readonly getFilesStatusService: GetFilesStatusService;
   private readonly downloadFileService: DownloadFileService;
+  private readonly shareFileService: ShareFileService;
 
   public constructor(
     createFileService: CreateFileService,
     getFilesService: GetFilesService,
     getFilesStatusService: GetFilesStatusService,
     downloadFileService: DownloadFileService,
+    shareFileService: ShareFileService,
   ) {
     this.createFileService = createFileService;
     this.getFilesService = getFilesService;
     this.getFilesStatusService = getFilesStatusService;
     this.downloadFileService = downloadFileService;
+    this.shareFileService = shareFileService;
   }
 
   @Post()
@@ -99,5 +106,14 @@ export class FilesController {
     );
     request.res.attachment(fileObj.name);
     return new StreamableFile(buffer);
+  }
+
+  @Patch(":id/ops/share")
+  public async shareFile(
+    @Param("id") id: string,
+    @UserDecorator() user: User,
+    @Body() body: ShareFileDto,
+  ) {
+    return await this.shareFileService.execute(id, user, body);
   }
 }

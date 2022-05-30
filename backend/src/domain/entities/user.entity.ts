@@ -1,6 +1,7 @@
 import {
   Collection,
   Entity,
+  ManyToMany,
   OneToMany,
   Property,
   Unique,
@@ -42,4 +43,10 @@ export class User extends BaseEntity {
     hidden: true,
   })
   tokens = new Collection<Token>(this);
+
+  @ManyToMany(() => File, (file) => file.viewers)
+  sharedViewFiles = new Collection<File>(this);
+
+  @ManyToMany(() => File, (file) => file.editors)
+  sharedEditFiles = new Collection<File>(this);
 }

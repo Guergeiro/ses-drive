@@ -8,9 +8,9 @@ import { DomainModule } from "./domain/domain.module";
 import { MikroOrmModule } from "@mikro-orm/nestjs";
 import { MikroOrmConfigService } from "./configs/MikroOrmConfigService";
 import { ScheduleModule } from "@nestjs/schedule";
-import { PassportStrategiesModule } from "./passport-strategies/passport-strategies.module";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { MongoExceptionFilter } from "./shared/filters/mongo-exception.filter";
+import { SecurityModule } from './security/security.module';
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { MongoExceptionFilter } from "./shared/filters/mongo-exception.filter";
     ScheduleModule.forRoot(),
     EventEmitterModule.forRoot(),
     DomainModule,
-    PassportStrategiesModule,
+    SecurityModule,
   ],
   providers: [
     {

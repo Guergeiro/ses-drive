@@ -14,5 +14,10 @@ import { RefreshTokenStrategyService } from "./refresh-token-strategy/refresh-to
     ApiKeyStrategyService,
     RefreshTokenStrategyService,
   ],
+  exports: [
+    AccessTokenStrategyService,
+    ApiKeyStrategyService,
+    RefreshTokenStrategyService,
+  ],
 })
 export class PassportStrategiesModule {}
