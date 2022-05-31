@@ -1,6 +1,7 @@
 import { Directory } from "@entities/directory.entity";
 import { File } from "@entities/file.entity";
 import { User } from "@entities/user.entity";
+import { FindOptions } from "@mikro-orm/core";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -21,10 +22,17 @@ export class RenameDirectoryService {
   }
 
   public async execute(id: string, { name }: RenameDirectoryDto, user: User) {
-    const directory = await this.directoryRepository.findOneOrFail({
-      id: id,
-      owner: user,
-    });
+    const directoryFilters: FindOptions<Directory>["filters"] = {
+      UPDATE: {
+        user: user,
+      },
+    };
+    const directory = await this.directoryRepository.findOneOrFail(
+      {
+        id: id,
+      },
+      { filters: directoryFilters },
+    );
 
     const splitted = directory.fullpath.split("/");
     splitted.pop();

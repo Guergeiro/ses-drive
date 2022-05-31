@@ -51,19 +51,11 @@ export class AwsS3Service {
   public getObjects(files: Array<File>) {
     const promises = files.map((file) => {
       return this.getObject(file);
-    })
+    });
     return Promise.allSettled(promises);
   }
 
   public getObject(file: File) {
     return this.client.getObject({ Key: file.id, Bucket: file.scope });
-  }
-
-  public async listFiles(path: string) {
-    const response = await this.client.createBucket({
-      Bucket: "sup",
-      ACL: "private",
-    });
-    return response;
   }
 }

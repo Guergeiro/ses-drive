@@ -21,7 +21,7 @@ import { User } from "./user.entity";
   cond: (args) => ({ fullpath: { $re: new RegExp(`${args.name}$`, "i") } }),
 })
 @Filter({
-  name: "CASL_READ",
+  name: "READ",
   cond: ({ user }) => ({
     $or: [
       {
@@ -34,11 +34,18 @@ import { User } from "./user.entity";
           },
         },
       },
+      {
+        editors: {
+          $elemMatch: {
+            $eq: user,
+          },
+        },
+      },
     ],
   }),
 })
 @Filter({
-  name: "CASL_WRITE",
+  name: "UPDATE",
   cond: ({ user }) => ({
     $or: [
       {
@@ -53,6 +60,10 @@ import { User } from "./user.entity";
       },
     ],
   }),
+})
+@Filter({
+  name: "DELETE",
+  cond: ({ user }) => ({ owner: user }),
 })
 export class File extends BaseEntity {
   @Property({ persist: false })

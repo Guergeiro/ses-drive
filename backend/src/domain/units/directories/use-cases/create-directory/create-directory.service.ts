@@ -1,5 +1,6 @@
 import { Directory } from "@entities/directory.entity";
 import { User } from "@entities/user.entity";
+import { FindOptions } from "@mikro-orm/core";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -17,14 +18,25 @@ export class CreateDirectoryService {
   }
 
   public async execute({ path, name }: CreateDirectoryDto, user: User) {
-    if (path == null) {
-      path = `/private/${user.email}`;
+    const directoryFilters: FindOptions<Directory>["filters"] = {
+      CREATE: {
+        user: user,
+      },
+      path: {
+        path: `/private/${user.email}`,
+      },
+    };
+
+    if (path != null) {
+      directoryFilters.path = {
+        path: path,
+      };
     }
 
-    const parent = await this.directoryRepository.findOneOrFail({
-      fullpath: path,
-      owner: user,
-    });
+    const parent = await this.directoryRepository.findOneOrFail(
+      {},
+      { filters: directoryFilters },
+    );
 
     const dir = this.directoryRepository.create({
       owner: user,

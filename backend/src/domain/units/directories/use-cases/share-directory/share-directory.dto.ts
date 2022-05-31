@@ -7,7 +7,7 @@ export enum Type {
   REVOKE = "revoke",
 }
 
-export class ShareFileDto {
+export class ShareDirectoryDto {
   @ApiProperty({
     enum: Type,
   })

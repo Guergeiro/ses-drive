@@ -5,6 +5,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -109,6 +110,7 @@ export class FilesController {
   }
 
   @Patch(":id/ops/share")
+  @HttpCode(204)
   public async shareFile(
     @Param("id") id: string,
     @UserDecorator() user: User,
