@@ -30,7 +30,7 @@ export class DirectoriesService {
 
   rename(id: string, name: string) {
     return this.http.patch<Directory>(
-      `${this.API_URL}/${id}/ops/rename-directory`,
+      `${this.API_URL}/${id}/ops/rename`,
       {
         name,
       },

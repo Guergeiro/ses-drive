@@ -75,7 +75,7 @@ export class DirectoriesController {
     return await this.deleteDirectoryService.execute(id, user);
   }
 
-  @Patch(":id/ops/rename-directory")
+  @Patch(":id/ops/rename")
   @HttpCode(204)
   public async renameDirectory(
     @Param("id") id: string,
@@ -86,6 +86,7 @@ export class DirectoriesController {
   }
 
   @Patch(":id/ops/share")
+  @HttpCode(204)
   public async shareDirectory(
     @Param("id") id: string,
     @UserDecorator() user: User,

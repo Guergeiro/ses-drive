@@ -77,6 +77,12 @@ export class Directory extends BaseEntity {
     return splited.pop();
   }
 
+  set name(newName: string) {
+    const splitted = this.fullpath.split("/");
+    splitted.pop();
+    this.fullpath = `${splitted.join("/")}/${newName}`;
+  }
+
   @Property({ persist: false, hidden: true })
   get scope() {
     const splited = this.fullpath.split("/");
