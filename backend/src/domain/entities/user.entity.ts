@@ -49,4 +49,10 @@ export class User extends BaseEntity {
 
   @ManyToMany(() => File, (file) => file.editors)
   sharedEditFiles = new Collection<File>(this);
+
+  @ManyToMany(() => Directory, (directory) => directory.viewers)
+  sharedViewFolders = new Collection<Directory>(this);
+
+  @ManyToMany(() => Directory, (directory) => directory.editors)
+  sharedEditFolders = new Collection<Directory>(this);
 }

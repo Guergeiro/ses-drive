@@ -1,5 +1,6 @@
 import { File } from "@entities/file.entity";
 import { User } from "@entities/user.entity";
+import { FindOptions } from "@mikro-orm/core";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -20,16 +21,17 @@ export class DownloadFileService {
   }
 
   public async execute(id: string, user: User) {
+    const fileFilters: FindOptions<File>["filters"] = {
+      READ: {
+        user: user,
+      },
+    };
     const file = await this.filesRepository.findOneOrFail(
       {
         id: id,
       },
       {
-        filters: {
-          CASL_READ: {
-            user: user,
-          },
-        },
+        filters: fileFilters,
       },
     );
 

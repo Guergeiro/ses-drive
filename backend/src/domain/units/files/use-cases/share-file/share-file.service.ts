@@ -45,17 +45,13 @@ export class ShareFileService {
   }
 
   private async handleViewShare(file: File, userToBeShared: User) {
-    await file.viewers.init();
-    if (file.viewers.contains(userToBeShared) === false) {
-      file.viewers.add(userToBeShared);
-    }
+    await this.handleRevokeShare(file, userToBeShared);
+    file.viewers.add(userToBeShared);
   }
 
   private async handleEditorsShare(file: File, userToBeShared: User) {
-    await file.editors.init();
-    if (file.editors.contains(userToBeShared) === false) {
-      file.editors.add(userToBeShared);
-    }
+    await this.handleRevokeShare(file, userToBeShared);
+    file.editors.add(userToBeShared);
   }
 
   private async handleRevokeShare(file: File, userToBeShared: User) {

@@ -18,7 +18,7 @@ export class GetFilesService {
 
   public async execute({ path, name }: GetFilesDto, user: User) {
     const fileFilters: FindOptions<File>["filters"] = {
-      CASL_READ: {
+      READ: {
         user: user,
       },
     };

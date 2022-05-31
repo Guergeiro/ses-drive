@@ -2,6 +2,7 @@ import {
   Collection,
   Entity,
   Filter,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   Property,
@@ -19,6 +20,55 @@ import { User } from "./user.entity";
 @Filter({
   name: "name",
   cond: (args) => ({ fullpath: { $re: new RegExp(`${args.name}$`, "i") } }),
+})
+@Filter({
+  name: "READ",
+  cond: ({ user }) => ({
+    $or: [
+      {
+        owner: user,
+      },
+      {
+        viewers: {
+          $elemMatch: {
+            $eq: user,
+          },
+        },
+      },
+      {
+        editors: {
+          $elemMatch: {
+            $eq: user,
+          },
+        },
+      },
+    ],
+  }),
+})
+@Filter({
+  name: "UPDATE",
+  cond: ({ user }) => ({
+    $or: [
+      {
+        owner: user,
+      },
+      {
+        editors: {
+          $elemMatch: {
+            $eq: user,
+          },
+        },
+      },
+    ],
+  }),
+})
+@Filter({
+  name: "CREATE",
+  cond: ({ user }) => ({ owner: user }),
+})
+@Filter({
+  name: "DELETE",
+  cond: ({ user }) => ({ owner: user }),
 })
 export class Directory extends BaseEntity {
   @Property({ persist: false })
@@ -53,4 +103,10 @@ export class Directory extends BaseEntity {
     orphanRemoval: true,
   })
   files = new Collection<File>(this);
+
+  @ManyToMany()
+  viewers = new Collection<User>(this);
+
+  @ManyToMany()
+  editors = new Collection<User>(this);
 }

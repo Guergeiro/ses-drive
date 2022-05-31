@@ -10,7 +10,7 @@ import { MikroOrmConfigService } from "./configs/MikroOrmConfigService";
 import { ScheduleModule } from "@nestjs/schedule";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { MongoExceptionFilter } from "./shared/filters/mongo-exception.filter";
-import { SecurityModule } from './security/security.module';
+import { SecurityModule } from "./security/security.module";
 
 @Module({
   imports: [

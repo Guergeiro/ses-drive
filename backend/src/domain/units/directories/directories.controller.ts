@@ -21,6 +21,8 @@ import { GetDirectoriesDto } from "./use-cases/get-directories/get-directories.d
 import { GetDirectoriesService } from "./use-cases/get-directories/get-directories.service";
 import { RenameDirectoryDto } from "./use-cases/rename-directory/rename-directory.dto";
 import { RenameDirectoryService } from "./use-cases/rename-directory/rename-directory.service";
+import { ShareDirectoryDto } from "./use-cases/share-directory/share-directory.dto";
+import { ShareDirectoryService } from "./use-cases/share-directory/share-directory.service";
 
 @ApiTags("directories")
 @ApiSecurity("x-api-key")
@@ -32,17 +34,20 @@ export class DirectoriesController {
   private readonly createDirectoryService: CreateDirectoryService;
   private readonly deleteDirectoryService: DeleteDirectoryService;
   private readonly renameDirectoryService: RenameDirectoryService;
+  private readonly shareDirectoryService: ShareDirectoryService;
 
   public constructor(
     getDirectoriesService: GetDirectoriesService,
     createDirectoryService: CreateDirectoryService,
     deleteDirectoryService: DeleteDirectoryService,
     renameDirectoryService: RenameDirectoryService,
+    shareDirectoryService: ShareDirectoryService,
   ) {
     this.getDirectoriesService = getDirectoriesService;
     this.createDirectoryService = createDirectoryService;
     this.deleteDirectoryService = deleteDirectoryService;
     this.renameDirectoryService = renameDirectoryService;
+    this.shareDirectoryService = shareDirectoryService;
   }
 
   @Get()
@@ -78,5 +83,14 @@ export class DirectoriesController {
     @UserDecorator() user: User,
   ) {
     return await this.renameDirectoryService.execute(id, body, user);
+  }
+
+  @Patch(":id/ops/share")
+  public async shareDirectory(
+    @Param("id") id: string,
+    @UserDecorator() user: User,
+    @Body() body: ShareDirectoryDto,
+  ) {
+    return await this.shareDirectoryService.execute(id, user, body);
   }
 }
