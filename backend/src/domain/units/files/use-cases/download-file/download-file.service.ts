@@ -20,10 +20,18 @@ export class DownloadFileService {
   }
 
   public async execute(id: string, user: User) {
-    const file = await this.filesRepository.findOneOrFail({
-      id: id,
-      owner: user,
-    });
+    const file = await this.filesRepository.findOneOrFail(
+      {
+        id: id,
+      },
+      {
+        filters: {
+          CASL_READ: {
+            user: user,
+          },
+        },
+      },
+    );
 
     const { Body } = await this.awsS3Service.getObject(file);
 
