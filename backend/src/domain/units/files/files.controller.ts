@@ -32,6 +32,7 @@ import { CreateFileDto } from "./use-cases/create-file/create-file.dto";
 import { CreateFileService } from "./use-cases/create-file/create-file.service";
 import { DeleteFileService } from "./use-cases/delete-file/delete-file.service";
 import { DownloadFileService } from "./use-cases/download-file/download-file.service";
+import { GetFileService } from "./use-cases/get-file/get-file.service";
 import { GetFilesStatusService } from "./use-cases/get-files-status/get-files-status.service";
 import { GetFilesDto } from "./use-cases/get-files/get-files.dto";
 import { GetFilesService } from "./use-cases/get-files/get-files.service";
@@ -53,6 +54,7 @@ export class FilesController {
   private readonly shareFileService: ShareFileService;
   private readonly deleteFileService: DeleteFileService;
   private readonly renameFileService: RenameFileService;
+  private readonly getFileService: GetFileService;
 
   public constructor(
     createFileService: CreateFileService,
@@ -62,6 +64,7 @@ export class FilesController {
     shareFileService: ShareFileService,
     deleteFileService: DeleteFileService,
     renameFileService: RenameFileService,
+    getFileService: GetFileService,
   ) {
     this.createFileService = createFileService;
     this.getFilesService = getFilesService;
@@ -70,6 +73,7 @@ export class FilesController {
     this.shareFileService = shareFileService;
     this.deleteFileService = deleteFileService;
     this.renameFileService = renameFileService;
+    this.getFileService = getFileService;
   }
 
   @Post()
@@ -103,6 +107,11 @@ export class FilesController {
   @Sse("status")
   public getFileStatus(@UserDecorator() user: User) {
     return this.getFilesStatusService.execute(user);
+  }
+
+  @Get(":id")
+  public async getFile(@Param("id") id: string, @UserDecorator() user: User) {
+    return await this.getFileService.execute(id, user);
   }
 
   @Delete(":id")

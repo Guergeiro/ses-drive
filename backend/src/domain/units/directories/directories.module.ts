@@ -9,6 +9,7 @@ import { DeleteDirectoryService } from "./use-cases/delete-directory/delete-dire
 import { GetDirectoriesService } from "./use-cases/get-directories/get-directories.service";
 import { RenameDirectoryService } from "./use-cases/rename-directory/rename-directory.service";
 import { ShareDirectoryService } from "./use-cases/share-directory/share-directory.service";
+import { GetDirectoryService } from './use-cases/get-directory/get-directory.service';
 
 @Module({
   controllers: [DirectoriesController],
@@ -19,6 +20,7 @@ import { ShareDirectoryService } from "./use-cases/share-directory/share-directo
     DeleteDirectoryService,
     RenameDirectoryService,
     ShareDirectoryService,
+    GetDirectoryService,
   ],
 })
 export class DirectoriesModule {}

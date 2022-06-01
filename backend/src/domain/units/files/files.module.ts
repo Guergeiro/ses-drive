@@ -12,6 +12,7 @@ import { ShareFileService } from "./use-cases/share-file/share-file.service";
 import { User } from "@entities/user.entity";
 import { DeleteFileService } from './use-cases/delete-file/delete-file.service';
 import { RenameFileService } from './use-cases/rename-file/rename-file.service';
+import { GetFileService } from './use-cases/get-file/get-file.service';
 
 @Module({
   controllers: [FilesController],
@@ -24,6 +25,7 @@ import { RenameFileService } from './use-cases/rename-file/rename-file.service';
     ShareFileService,
     DeleteFileService,
     RenameFileService,
+    GetFileService,
   ],
 })
 export class FilesModule {}
