@@ -4,6 +4,7 @@ import { BothAuthGuard } from "@guards/both-auth.guard";
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -29,10 +30,14 @@ import { Request } from "express";
 import { memoryStorage } from "multer";
 import { CreateFileDto } from "./use-cases/create-file/create-file.dto";
 import { CreateFileService } from "./use-cases/create-file/create-file.service";
+import { DeleteFileService } from "./use-cases/delete-file/delete-file.service";
 import { DownloadFileService } from "./use-cases/download-file/download-file.service";
+import { GetFileService } from "./use-cases/get-file/get-file.service";
 import { GetFilesStatusService } from "./use-cases/get-files-status/get-files-status.service";
 import { GetFilesDto } from "./use-cases/get-files/get-files.dto";
 import { GetFilesService } from "./use-cases/get-files/get-files.service";
+import { RenameFileDto } from "./use-cases/rename-file/rename-file.dto";
+import { RenameFileService } from "./use-cases/rename-file/rename-file.service";
 import { ShareFileDto } from "./use-cases/share-file/share-file.dto";
 import { ShareFileService } from "./use-cases/share-file/share-file.service";
 
@@ -47,6 +52,9 @@ export class FilesController {
   private readonly getFilesStatusService: GetFilesStatusService;
   private readonly downloadFileService: DownloadFileService;
   private readonly shareFileService: ShareFileService;
+  private readonly deleteFileService: DeleteFileService;
+  private readonly renameFileService: RenameFileService;
+  private readonly getFileService: GetFileService;
 
   public constructor(
     createFileService: CreateFileService,
@@ -54,12 +62,18 @@ export class FilesController {
     getFilesStatusService: GetFilesStatusService,
     downloadFileService: DownloadFileService,
     shareFileService: ShareFileService,
+    deleteFileService: DeleteFileService,
+    renameFileService: RenameFileService,
+    getFileService: GetFileService,
   ) {
     this.createFileService = createFileService;
     this.getFilesService = getFilesService;
     this.getFilesStatusService = getFilesStatusService;
     this.downloadFileService = downloadFileService;
     this.shareFileService = shareFileService;
+    this.deleteFileService = deleteFileService;
+    this.renameFileService = renameFileService;
+    this.getFileService = getFileService;
   }
 
   @Post()
@@ -95,6 +109,20 @@ export class FilesController {
     return this.getFilesStatusService.execute(user);
   }
 
+  @Get(":id")
+  public async getFile(@Param("id") id: string, @UserDecorator() user: User) {
+    return await this.getFileService.execute(id, user);
+  }
+
+  @Delete(":id")
+  @HttpCode(204)
+  public async deleteFile(
+    @Param("id") id: string,
+    @UserDecorator() user: User,
+  ) {
+    return await this.deleteFileService.execute(id, user);
+  }
+
   @Get(":id/ops/download")
   public async downloadFile(
     @Req() request: Request,
@@ -107,6 +135,16 @@ export class FilesController {
     );
     request.res.attachment(fileObj.name);
     return new StreamableFile(buffer);
+  }
+
+  @Patch(":id/ops/rename")
+  @HttpCode(204)
+  public async renameFile(
+    @Param("id") id: string,
+    @Body() body: RenameFileDto,
+    @UserDecorator() user: User,
+  ) {
+    return await this.renameFileService.execute(id, body, user);
   }
 
   @Patch(":id/ops/share")

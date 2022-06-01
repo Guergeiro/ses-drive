@@ -34,10 +34,7 @@ export class RenameDirectoryService {
       { filters: directoryFilters },
     );
 
-    const splitted = directory.fullpath.split("/");
-    splitted.pop();
-    const basePath = splitted.join("/");
-    directory.fullpath = `${basePath}/${name}`;
+    directory.name = name;
 
     await this.renameFolders(directory.folders, directory.fullpath);
     await this.renameFiles(directory.files, directory.fullpath);

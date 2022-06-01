@@ -19,6 +19,7 @@ import { CreateDirectoryService } from "./use-cases/create-directory/create-dire
 import { DeleteDirectoryService } from "./use-cases/delete-directory/delete-directory.service";
 import { GetDirectoriesDto } from "./use-cases/get-directories/get-directories.dto";
 import { GetDirectoriesService } from "./use-cases/get-directories/get-directories.service";
+import { GetDirectoryService } from "./use-cases/get-directory/get-directory.service";
 import { RenameDirectoryDto } from "./use-cases/rename-directory/rename-directory.dto";
 import { RenameDirectoryService } from "./use-cases/rename-directory/rename-directory.service";
 import { ShareDirectoryDto } from "./use-cases/share-directory/share-directory.dto";
@@ -35,6 +36,7 @@ export class DirectoriesController {
   private readonly deleteDirectoryService: DeleteDirectoryService;
   private readonly renameDirectoryService: RenameDirectoryService;
   private readonly shareDirectoryService: ShareDirectoryService;
+  private readonly getDirectoryService: GetDirectoryService;
 
   public constructor(
     getDirectoriesService: GetDirectoriesService,
@@ -42,12 +44,14 @@ export class DirectoriesController {
     deleteDirectoryService: DeleteDirectoryService,
     renameDirectoryService: RenameDirectoryService,
     shareDirectoryService: ShareDirectoryService,
+    getDirectoryService: GetDirectoryService,
   ) {
     this.getDirectoriesService = getDirectoriesService;
     this.createDirectoryService = createDirectoryService;
     this.deleteDirectoryService = deleteDirectoryService;
     this.renameDirectoryService = renameDirectoryService;
     this.shareDirectoryService = shareDirectoryService;
+    this.getDirectoryService = getDirectoryService;
   }
 
   @Get()
@@ -66,6 +70,14 @@ export class DirectoriesController {
     return await this.createDirectoryService.execute(body, user);
   }
 
+  @Get(":id")
+  public async getDirectory(
+    @Param("id") id: string,
+    @UserDecorator() user: User,
+  ) {
+    return await this.getDirectoryService.execute(id, user);
+  }
+
   @Delete(":id")
   @HttpCode(204)
   public async deleteDirectory(
@@ -75,7 +87,7 @@ export class DirectoriesController {
     return await this.deleteDirectoryService.execute(id, user);
   }
 
-  @Patch(":id/ops/rename-directory")
+  @Patch(":id/ops/rename")
   @HttpCode(204)
   public async renameDirectory(
     @Param("id") id: string,
@@ -86,6 +98,7 @@ export class DirectoriesController {
   }
 
   @Patch(":id/ops/share")
+  @HttpCode(204)
   public async shareDirectory(
     @Param("id") id: string,
     @UserDecorator() user: User,
