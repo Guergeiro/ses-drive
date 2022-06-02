@@ -1,9 +1,9 @@
-import { Directory } from '@entities/directory.entity';
-import { User } from '@entities/user.entity';
-import { FindOptions } from '@mikro-orm/core';
-import { EntityRepository } from '@mikro-orm/mongodb';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+import { Directory } from "@entities/directory.entity";
+import { User } from "@entities/user.entity";
+import { FindOptions } from "@mikro-orm/core";
+import { EntityRepository } from "@mikro-orm/mongodb";
+import { InjectRepository } from "@mikro-orm/nestjs";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class GetDirectoryService {

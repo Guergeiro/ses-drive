@@ -32,7 +32,9 @@ async function bootstrap() {
     },
   });
 
-  app.setGlobalPrefix(env["host"]["PREFIX"]);
+  app.setGlobalPrefix(env["host"]["PREFIX"], {
+    exclude: ["/public", "/public/(.*)"],
+  });
   app.enableShutdownHooks();
 
   app.use(helmet());
