@@ -44,7 +44,7 @@
 
         <div class="row" *ngIf="this.directory">
           <div class="col-sm-6 col-md-3 mb-2" *ngFor="let file of this.directory.files;">
-            <ngx-file [file]="file"></ngx-file>
+            <ngx-file [file]="file" (newRefreshParent)="getDirectories($event)"></ngx-file>
           </div>
           <div class="col-12" *ngIf="this.directory.files.length === 0">
             <p class="paragraph m-0 text-center">

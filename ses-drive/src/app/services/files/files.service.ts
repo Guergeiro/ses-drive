@@ -24,4 +24,14 @@ export class FilesService {
       responseType: 'blob',
     });
   }
+
+  rename(id: string, name: string) {
+    return this.http.patch<File>(`${this.API_URL}/${id}/ops/rename`, {
+      name,
+    });
+  }
+
+  delete(id: string) {
+    return this.http.delete(`${this.API_URL}/${id}`);
+  }
 }
