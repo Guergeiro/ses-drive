@@ -17,9 +17,11 @@ import {
 } from '@nebular/auth';
 import { NbAuthService } from '@nebular/auth';
 import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
+import { environment } from '../../../../environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  private readonly API_URL_PREFIX = environment.API_URL_PREFIX;
   blocksRequests: BehaviorSubject<boolean>;
   blocksRequests$: Observable<boolean>;
 
@@ -122,7 +124,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     const requestRefreshToken = new HttpRequest(
       'GET',
-      `http://localhost:3000/api/v0/auth/refresh`,
+      `${this.API_URL_PREFIX}/auth/refresh`,
       { withCredentials: true },
     );
 
