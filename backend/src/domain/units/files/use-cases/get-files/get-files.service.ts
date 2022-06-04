@@ -21,6 +21,9 @@ export class GetFilesService {
       READ: {
         user: user,
       },
+      path: {
+        path: `/private`,
+      },
     };
     if (path != null) {
       fileFilters.path = {

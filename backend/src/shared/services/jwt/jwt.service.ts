@@ -6,9 +6,12 @@ import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService as Jwt } from "@nestjs/jwt";
+import { createCipheriv, createDecipheriv } from "crypto";
 
 @Injectable()
 export class JwtService {
+  private readonly alg = "aes-256-cbc";
+
   private readonly userRepository: EntityRepository<User>;
   private readonly tokenRepository: EntityRepository<Token>;
   private readonly configService: ConfigService;
@@ -54,15 +57,14 @@ export class JwtService {
     user.tokens.add(token);
     this.tokenRepository.persist(token);
 
-    return { refresh_token, expiresAt };
+    return { refresh_token: this.encrypt(refresh_token), expiresAt };
   }
 
   public async validateToken(tokenString?: string) {
+    if (tokenString == null) {
+      return null;
+    }
     try {
-      if (tokenString == null) {
-        return null;
-      }
-
       const decodedString = Buffer.from(tokenString, "base64url").toString(
         "utf8",
       );
@@ -85,5 +87,23 @@ export class JwtService {
     });
 
     return Buffer.from(tokenString, "utf8").toString("base64url");
+  }
+
+  public encrypt(text: string) {
+    const key = this.configService.get<string>("enc.KEY");
+    const iv = this.configService.get<string>("enc.IV");
+    const cipher = createCipheriv(this.alg, Buffer.from(key), iv);
+    let encryptedText = cipher.update(text, "utf8", "hex");
+    encryptedText += cipher.final("hex");
+    return encryptedText;
+  }
+
+  public decrypt(text: string) {
+    const key = this.configService.get<string>("enc.KEY");
+    const iv = this.configService.get<string>("enc.IV");
+    const decipher = createDecipheriv(this.alg, Buffer.from(key), iv);
+    let decryptedText = decipher.update(text, "hex", "utf8");
+    decryptedText += decipher.final("utf8");
+    return decryptedText;
   }
 }

@@ -34,14 +34,19 @@ export class RefreshTokenStrategyService extends PassportStrategy(
 
   public async validate(request: Request, done: VerifiedCallback) {
     const tokenString: string = request.cookies["refresh_token"];
+    if (tokenString == null) {
+      return done(new UnauthorizedException(), null);
+    }
 
-    const user = await this.jwtService.validateToken(tokenString);
+    const user = await this.jwtService.validateToken(
+      this.jwtService.decrypt(tokenString),
+    );
     if (user == null) {
       return done(new UnauthorizedException(), null);
     }
 
     const refreshToken = await this.tokenRepository.findOne({
-      token: tokenString,
+      token: this.jwtService.decrypt(tokenString),
       type: "refresh",
       user: user,
     });

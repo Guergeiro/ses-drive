@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsString } from "class-validator";
+import { IsEmail, IsEnum } from "class-validator";
 
 export enum Type {
   VIEW = "view",
@@ -15,6 +15,6 @@ export class ShareDirectoryDto {
   public readonly type!: Type;
 
   @ApiProperty()
-  @IsString()
-  public readonly userId: string;
+  @IsEmail()
+  public readonly userEmail: string;
 }

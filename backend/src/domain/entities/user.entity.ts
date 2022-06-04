@@ -1,12 +1,17 @@
 import {
+  BeforeCreate,
+  BeforeUpdate,
   Collection,
   Entity,
+  EventArgs,
   ManyToMany,
   OneToMany,
   Property,
   Unique,
 } from "@mikro-orm/core";
+import { genSalt, hash } from "bcrypt";
 import { randomBytes } from "crypto";
+import { environment } from "src/configs/environment";
 import { BaseEntity } from "./base.entity";
 import { Directory } from "./directory.entity";
 import { File } from "./file.entity";
@@ -28,7 +33,7 @@ export class User extends BaseEntity {
   password!: string;
 
   @Property({ hidden: true })
-  tokenVersion = 1;
+  tokenVersion = 0;
 
   @OneToMany(() => Directory, (directory) => directory.owner, {
     orphanRemoval: true,
@@ -55,4 +60,17 @@ export class User extends BaseEntity {
 
   @ManyToMany(() => Directory, (directory) => directory.editors)
   sharedEditFolders = new Collection<Directory>(this);
+
+  @BeforeCreate()
+  @BeforeUpdate()
+  public async hashPassword({ changeSet }: EventArgs<this>) {
+    if (changeSet.payload.password == null) {
+      return;
+    }
+    const { auth } = await environment();
+    const salt = await genSalt(10);
+    const password = `${changeSet.payload.password}:${auth.PEPPER}`;
+    this.password = await hash(password, salt);
+    this.tokenVersion += 1;
+  }
 }
