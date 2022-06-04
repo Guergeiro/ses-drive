@@ -63,7 +63,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.meService
       .me()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((user: User) => (this.user = user));
+      .subscribe((user: User) => {
+        this.user = user;
+
+        sessionStorage.setItem('user_email', user.email);
+        sessionStorage.setItem('user_id', user.id);
+      });
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService

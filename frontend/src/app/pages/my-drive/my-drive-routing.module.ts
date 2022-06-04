@@ -7,6 +7,13 @@ const routes: Routes = [
     path: '',
     component: MyDriveComponent,
   },
+  {
+    path: 'public',
+    component: MyDriveComponent,
+    data: {
+      base: '/public',
+    },
+  },
 ];
 
 @NgModule({
