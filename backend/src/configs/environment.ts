@@ -19,6 +19,7 @@ export async function environment() {
   env["auth"] = auth();
   env["aws"] = aws();
   env["database"] = database();
+  env["enc"] = encription();
   env["host"] = await host();
   env["ratelimiter"] = ratelimiter();
   env["recaptcha"] = recaptcha();
@@ -54,7 +55,7 @@ function auth() {
 
 function aws() {
   return {
-    ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY,
+    ACCESS_KEY: process.env.AWS_ACCESS_KEY,
     SECRET_KEY: process.env.AWS_SECRET_KEY,
     REGION: process.env.AWS_REGION,
   };
@@ -66,6 +67,13 @@ function database() {
     PASSWORD: process.env.DB_PASSWORD,
     HOST: process.env.DB_HOST,
     NAME: process.env.DB_NAME,
+  };
+}
+
+function encription() {
+  return {
+    KEY: process.env.ENC_KEY,
+    IV: process.env.ENC_IV,
   };
 }
 

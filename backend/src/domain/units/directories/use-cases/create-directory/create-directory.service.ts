@@ -42,6 +42,8 @@ export class CreateDirectoryService {
       owner: user,
       fullpath: `${parent.fullpath}/${name}`,
       parent: parent,
+      viewers: parent.viewers.getItems(),
+      editors: parent.editors.getItems(),
     });
 
     await this.directoryRepository.persistAndFlush(dir);

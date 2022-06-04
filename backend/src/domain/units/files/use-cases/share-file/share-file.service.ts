@@ -18,9 +18,9 @@ export class ShareFileService {
     this.fileRepository = fileRepository;
   }
 
-  public async execute(id: string, user: User, { type, userId }: ShareFileDto) {
+  public async execute(id: string, user: User, { type, userEmail }: ShareFileDto) {
     const userToBeShared = await this.userRepository.findOneOrFail({
-      id: userId,
+      email: userEmail,
     });
     const file = await this.fileRepository.findOneOrFail({
       id: id,

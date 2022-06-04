@@ -23,7 +23,7 @@ export class GetDirectoriesService {
         user: user,
       },
       path: {
-        path: `/private/${user.email}`,
+        path: `/private`,
       },
     };
 

@@ -3,10 +3,10 @@ import { File } from "@entities/file.entity";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-type S3RequiredFile = {
+export type S3RequiredFile = {
   fileObj: File;
   buffer: Buffer;
-  type: string;
+  scope: string;
 };
 
 @Injectable()
@@ -17,8 +17,8 @@ export class AwsS3Service {
     const s3Config: S3ClientConfig = {
       region: configService.get<string>("aws.REGION"),
       credentials: {
-        accessKeyId: configService.get<string>("aws.SECRET_KEY"),
-        secretAccessKey: configService.get<string>("aws.ACCESS_KEY"),
+        accessKeyId: configService.get<string>("aws.ACCESS_KEY"),
+        secretAccessKey: configService.get<string>("aws.SECRET_KEY"),
       },
     };
     const isProduction =
@@ -40,11 +40,12 @@ export class AwsS3Service {
     return Promise.allSettled(promises);
   }
 
-  public createFile({ fileObj, buffer, type }: S3RequiredFile) {
+  public createFile({ fileObj, buffer, scope }: S3RequiredFile) {
     return this.client.putObject({
       Body: buffer,
-      Bucket: type,
+      Bucket: this.getBucket(scope),
       Key: fileObj.id,
+      ContentType: fileObj.mimetype,
     });
   }
 
@@ -55,7 +56,12 @@ export class AwsS3Service {
     return Promise.allSettled(promises);
   }
 
-  public getObject(file: File) {
-    return this.client.getObject({ Key: file.id, Bucket: file.scope });
+  public getObject({ id, scope }: File) {
+    return this.client.getObject({ Key: id, Bucket: this.getBucket(scope) });
+  }
+
+  private getBucket(scope: string) {
+    const bucket = `ses-drive-${scope}`;
+    return bucket;
   }
 }

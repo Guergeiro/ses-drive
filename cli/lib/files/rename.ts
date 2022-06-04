@@ -3,7 +3,7 @@ import { apiurl } from "../url.ts";
 import { headers } from "../_utils/headers.ts";
 import { json } from "../_utils/request.ts";
 
-export const rename = new Command().description("Rename a directory").arguments(
+export const rename = new Command().description("Rename a file").arguments(
   "<id:string> <name:string>",
 ).action(
   // @ts-ignore: `key` is always defined as it's a global option
@@ -13,7 +13,7 @@ export const rename = new Command().description("Rename a directory").arguments(
     };
 
     const data = await json(
-      await fetch(`${apiurl}/directories/${id}/ops/rename`, {
+      await fetch(`${apiurl}/files/${id}/ops/rename`, {
         headers: headers(key),
         method: "PATCH",
         body: JSON.stringify(body),
