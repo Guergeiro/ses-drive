@@ -12,6 +12,7 @@ import { Subscription, of } from 'rxjs';
 import { Directory } from '../../types/Directory';
 import { AddFolderDialogComponent } from '../../components/dialogs/add-folder-dialog/add-folder-dialog.component';
 import { AddFileDialogComponent } from '../../components/dialogs/add-file-dialog/add-file-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'ngx-my-drive',
@@ -28,6 +29,8 @@ export class MyDriveComponent implements OnInit, OnDestroy {
 
   directory: Directory;
   curPath: string;
+  base: string;
+  title: string;
 
   loading = false;
   subscriptions: Subscription[] = [];
@@ -38,10 +41,20 @@ export class MyDriveComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private readonly handleError: ErrorHandler,
     private readonly dialogService: NbDialogService,
+    private readonly route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this.getDirectories();
+    this.route.data.subscribe((params) => {
+      this.base = params['base'];
+      this.title = params['title'];
+
+      if (this.base == null) {
+        this.base = `/private/${sessionStorage.getItem('user_email')}`;
+      }
+
+      this.getDirectories();
+    });
 
     this.nbMenuService
       .onItemClick()
@@ -61,7 +74,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
       });
   }
 
-  getDirectories(path?: string) {
+  getDirectories(path: string = this.base) {
     this.loading = true;
     const sub = this.directoriesService
       .getByPath(path)

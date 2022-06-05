@@ -6,6 +6,17 @@ const routes: Routes = [
   {
     path: '',
     component: MyDriveComponent,
+    data: {
+      title: 'Private',
+    },
+  },
+  {
+    path: 'public',
+    component: MyDriveComponent,
+    data: {
+      base: '/public',
+      title: 'Public',
+    },
   },
 ];
 
