@@ -1,6 +1,6 @@
 import { File } from "@entities/file.entity";
 import { User } from "@entities/user.entity";
-import { FindOptions } from "@mikro-orm/core";
+import { FilterQuery, FindOptions } from "@mikro-orm/core";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -16,7 +16,14 @@ export class GetFilesService {
     this.filesRepository = filesRepository;
   }
 
-  public async execute({ path, name }: GetFilesDto, user: User) {
+  public async execute({ path, name, shared }: GetFilesDto, user: User) {
+    const filterQuery: FilterQuery<File> = {};
+
+    if (shared === true) {
+      filterQuery.owner = {
+        $ne: user,
+      };
+    }
     const fileFilters: FindOptions<File>["filters"] = {
       READ: {
         user: user,
@@ -36,7 +43,9 @@ export class GetFilesService {
       };
     }
 
-    const files = await this.filesRepository.findAll({ filters: fileFilters });
+    const files = await this.filesRepository.find(filterQuery, {
+      filters: fileFilters,
+    });
     return files;
   }
 }

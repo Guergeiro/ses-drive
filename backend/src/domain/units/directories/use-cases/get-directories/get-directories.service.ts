@@ -1,6 +1,6 @@
 import { Directory } from "@entities/directory.entity";
 import { User } from "@entities/user.entity";
-import { FindOptions } from "@mikro-orm/core";
+import { FilterQuery, FindOptions } from "@mikro-orm/core";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -17,7 +17,15 @@ export class GetDirectoriesService {
     this.directoryRepository = directoryRepository;
   }
 
-  public async execute({ path }: GetDirectoriesDto, user: User) {
+  public async execute({ path, name, shared }: GetDirectoriesDto, user: User) {
+    const filterQuery: FilterQuery<Directory> = {};
+
+    if (shared === true) {
+      filterQuery.owner = {
+        $ne: user,
+      };
+    }
+
     const directoryFilters: FindOptions<Directory>["filters"] = {
       READ: {
         user: user,
@@ -32,12 +40,17 @@ export class GetDirectoriesService {
         path: path,
       };
     }
+    if (name != null) {
+      directoryFilters.name = {
+        name: name,
+      };
+    }
 
-    const directory = await this.directoryRepository.findOneOrFail(
-      {},
-      { populate: ["folders", "files"], filters: directoryFilters },
-    );
+    const directories = await this.directoryRepository.find(filterQuery, {
+      populate: ["folders", "files"],
+      filters: directoryFilters,
+    });
 
-    return directory;
+    return directories;
   }
 }
