@@ -1,9 +1,9 @@
-FROM guergeiro/pnpm:16 as cache
+FROM guergeiro/pnpm:14 as cache
 WORKDIR /usr/src/app
 COPY package.json .
 RUN pnpm install --shamefully-hoist
 
-FROM guergeiro/pnpm:16
+FROM guergeiro/pnpm:14
 WORKDIR /usr/src/app
 COPY . .
 RUN rm -rdf node_modules

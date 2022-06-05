@@ -1,0 +1,91 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 6
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'pnpm'
+          cache-dependency-path: backend/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: backend
+        run: pnpm install
+      - name: Build
+        working-directory: backend
+        run: pnpm build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-dist
+          path: backend/dist
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 6
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install --shamefully-hoist
+      - name: Build
+        working-directory: frontend
+        run: pnpm build:prod
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+  deploy_heroku:
+    runs-on: ubuntu-latest
+    needs: [build-backend, build-frontend]
+    strategy:
+      matrix:
+        app: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Prepare envs
+        run: |
+          echo "DIST_KEY_PATH=${{ matrix.app }}-dist" >> $GITHUB_ENV
+          echo "DIST_PATH=${{ matrix.app }}/dist" >> $GITHUB_ENV
+          echo "PROD_DOCKERFILE=${{ matrix.app }}/Dockerfile.prod" >> $GITHUB_ENV
+          echo "DOCKERFILE=${{ matrix.app }}/Dockerfile" >> $GITHUB_ENV
+          echo "HEROKU_APP=ses-drive-${{ matrix.app }}" >> $GITHUB_ENV
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.DIST_KEY_PATH }}
+          path: ${{ env.DIST_PATH }}
+      - name: Rename dockerfile
+        run: |
+          mv \
+          ${{ env.PROD_DOCKERFILE }} \
+          ${{ env.DOCKERFILE }}
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{ env.HEROKU_APP }}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          appdir: ${{ matrix.app }}
+          usedocker: true
+          docker_heroku_process_type: web
+          stack: "container"

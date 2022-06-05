@@ -42,14 +42,9 @@ services:
     container_name: backend
     volumes:
       - ./backend/src:/usr/src/app/src
+    env_file:
+      - .env
     environment:
-      DB_USER: dev
-      DB_PASSWORD: p9m0Q9nT7Pmugtxb
-      DB_HOST: mongodb+srv://ses.bhxgf.mongodb.net/
-      DB_NAME: ses
-      RECAPTCHA_SECRET: 6Ldyo5kfAAAAAJ0WXETfwVTN3iOX34fAEJ0zAEOF
-      ENC_KEY: U24yaiid872yHM4qQU7AqJCFfuJG5qaV
-      ENC_IV: rB2XjMgeR4T2oU8v
       PORT: 3000
       AWS_REGION: us-east-1
       AWS_ACCESS_KEY: test

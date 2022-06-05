@@ -5,4 +5,5 @@
  */
 export const environment = {
   production: true,
+  API_URL_PREFIX: 'https://ses-drive-backend.herokuapp.com/api/v0',
 };
