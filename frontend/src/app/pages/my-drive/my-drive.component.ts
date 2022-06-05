@@ -13,6 +13,7 @@ import { Directory } from '../../types/Directory';
 import { AddFolderDialogComponent } from '../../components/dialogs/add-folder-dialog/add-folder-dialog.component';
 import { AddFileDialogComponent } from '../../components/dialogs/add-file-dialog/add-file-dialog.component';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'ngx-my-drive',
@@ -142,6 +143,12 @@ export class MyDriveComponent implements OnInit, OnDestroy {
 
         this.subscriptions.push(sub);
       });
+  }
+
+  serve() {
+    const email = sessionStorage.getItem('user_email');
+
+    window.open(`${environment.BASE_URL}/public/${email}`, '_blank');
   }
 
   handleBreadcumb() {

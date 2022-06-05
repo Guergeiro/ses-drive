@@ -3,7 +3,7 @@
     My Drive - {{ this.title }}
 
     <div class="d-flex align-items-center">
-      <button nbButton outline status="info" class="mr-2" *ngIf="this.title === 'Public'">
+      <button nbButton outline status="info" class="mr-2" *ngIf="this.title === 'Public'" (click)="this.serve()">
         Serve<nb-icon icon="globe-outline"></nb-icon>
       </button>
       <button
