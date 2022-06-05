@@ -1,9 +1,21 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString } from "class-validator";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { Type } from "class-transformer";
+import { IsBoolean, IsOptional, IsString } from "class-validator";
 
 export class GetDirectoriesDto {
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   public readonly path?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  public readonly name?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  public readonly shared: boolean = false;
 }
