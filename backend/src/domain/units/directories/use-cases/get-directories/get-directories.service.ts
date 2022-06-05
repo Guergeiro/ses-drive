@@ -18,14 +18,6 @@ export class GetDirectoriesService {
   }
 
   public async execute({ path, name, shared }: GetDirectoriesDto, user: User) {
-    const filterQuery: FilterQuery<Directory> = {};
-
-    if (shared === true) {
-      filterQuery.owner = {
-        $ne: user,
-      };
-    }
-
     const directoryFilters: FindOptions<Directory>["filters"] = {
       READ: {
         user: user,
@@ -46,11 +38,26 @@ export class GetDirectoriesService {
       };
     }
 
-    const directories = await this.directoryRepository.find(filterQuery, {
-      populate: ["folders", "files"],
-      filters: directoryFilters,
-    });
+    if (shared === true) {
+      const filterQuery: FilterQuery<Directory> = {
+        owner: {
+          $ne: user,
+        },
+      };
+      const directories = await this.directoryRepository.find(filterQuery, {
+        populate: ["folders", "files"],
+        filters: directoryFilters,
+      });
 
-    return directories;
+      return directories;
+    }
+
+    return await this.directoryRepository.findOneOrFail(
+      {},
+      {
+        populate: ["folders", "files"],
+        filters: directoryFilters,
+      },
+    );
   }
 }
