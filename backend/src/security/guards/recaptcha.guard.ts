@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Request } from "express";
+import fetch from "node-fetch";
 
 type RecapthaResponse = {
   success: boolean; // whether this request was a valid reCAPTCHA token for your site

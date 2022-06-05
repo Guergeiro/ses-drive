@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const helmet = require('helmet');
 const { join } = require('path');
 
 //Prevent crawlers from indexing...
@@ -8,8 +7,6 @@ app.use(function (_req, res, next) {
   res.setHeader('X-Robots-Tag', 'noindex, follow');
   return next();
 });
-
-app.use(helmet());
 
 // Run the app by serving the static files
 // in the dist directory
