@@ -30,6 +30,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
   directory: Directory;
   curPath: string;
   base: string;
+  title: string;
 
   loading = false;
   subscriptions: Subscription[] = [];
@@ -46,6 +47,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.data.subscribe((params) => {
       this.base = params['base'];
+      this.title = params['title'];
 
       if (this.base == null) {
         this.base = `/private/${sessionStorage.getItem('user_email')}`;

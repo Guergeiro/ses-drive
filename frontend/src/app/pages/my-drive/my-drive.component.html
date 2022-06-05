@@ -1,13 +1,19 @@
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
   <nb-card-header class="d-flex align-items-center justify-content-between">
-    My Drive
-    <button
-      nbButton
-      status="primary"
-      [nbContextMenu]="items"
-      nbContextMenuTag="my-context-menu">
-      New<nb-icon icon="plus"></nb-icon>
-    </button>
+    My Drive - {{ this.title }}
+
+    <div class="d-flex align-items-center">
+      <button nbButton outline status="info" class="mr-2" *ngIf="this.title === 'Public'">
+        Serve<nb-icon icon="globe-outline"></nb-icon>
+      </button>
+      <button
+        nbButton
+        status="primary"
+        [nbContextMenu]="items"
+        nbContextMenuTag="my-context-menu">
+        New<nb-icon icon="plus"></nb-icon>
+      </button>
+    </div>
   </nb-card-header>
 
 
