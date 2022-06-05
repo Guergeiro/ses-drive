@@ -21,6 +21,8 @@ import { Folder } from '../../types/Folder';
 import { Subscription, of } from 'rxjs';
 import { YesOrNoDialogComponent } from '../dialogs/yes-or-no-dialog/yes-or-no-dialog.component';
 import { RenameDialogComponent } from '../dialogs/rename-dialog/rename-dialog.component';
+import { ShareDialogComponent } from '../dialogs/share-dialog/share-dialog.component';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-folder',
@@ -33,6 +35,7 @@ export class FolderComponent implements OnInit, OnDestroy {
 
   menu = [
     { title: 'Rename', icon: 'edit-outline' },
+    { title: 'Share', icon: 'share-outline' },
     { title: 'Delete', icon: 'trash-outline' },
   ];
 
@@ -47,6 +50,7 @@ export class FolderComponent implements OnInit, OnDestroy {
     private readonly cdr: ChangeDetectorRef,
     private readonly handleError: ErrorHandler,
     private readonly dialogService: NbDialogService,
+    private readonly toastService: NbToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -59,6 +63,11 @@ export class FolderComponent implements OnInit, OnDestroy {
       .subscribe((title) => {
         if (title === 'Rename') {
           this.renameFolder();
+          return;
+        }
+
+        if (title === 'Share') {
+          this.share();
           return;
         }
 
@@ -92,7 +101,7 @@ export class FolderComponent implements OnInit, OnDestroy {
         const sub = this.directoriesService
           .rename(this.folder.id, name)
           .pipe(
-            tap((res) => {
+            tap(() => {
               this.newChangeDirectory.emit(
                 this.buildParentPath(this.folder.fullpath),
               );
@@ -130,7 +139,7 @@ export class FolderComponent implements OnInit, OnDestroy {
         const sub = this.directoriesService
           .delete(this.folder.id)
           .pipe(
-            tap((res) => {
+            tap(() => {
               this.newChangeDirectory.emit(
                 this.buildParentPath(this.folder.fullpath),
               );
@@ -146,6 +155,58 @@ export class FolderComponent implements OnInit, OnDestroy {
           )
           .subscribe();
 
+        this.subscriptions.push(sub);
+      });
+  }
+
+  share() {
+    this.dialogService
+      .open(ShareDialogComponent, {
+        closeOnBackdropClick: false,
+        context: {
+          title: 'Share Folder',
+          current: this.folder.name,
+        },
+      })
+      .onClose.subscribe((res) => {
+        if (res == null) {
+          return;
+        }
+
+        this.loading = true;
+        const sub = this.directoriesService
+          .share(this.folder.id, res.permission, res.email)
+          .pipe(
+            tap(() => {
+              this.newChangeDirectory.emit(
+                this.buildParentPath(this.folder.fullpath),
+              );
+
+              this.toastService.show(
+                `You changed the permissions with success!`,
+                'Success',
+                {
+                  status: 'success',
+                },
+              );
+            }),
+            finalize(() => {
+              this.loading = false;
+              this.cdr.markForCheck();
+            }),
+            catchError((err) => {
+              this.toastService.show(
+                'Error while sharing, try again later.',
+                'Error',
+                {
+                  status: 'danger',
+                },
+              );
+              this.handleError.handleError(err);
+              return of(null);
+            }),
+          )
+          .subscribe();
         this.subscriptions.push(sub);
       });
   }

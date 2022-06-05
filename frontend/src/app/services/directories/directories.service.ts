@@ -29,11 +29,15 @@ export class DirectoriesService {
   }
 
   rename(id: string, name: string) {
-    return this.http.patch<Directory>(
-      `${this.API_URL}/${id}/ops/rename`,
-      {
-        name,
-      },
-    );
+    return this.http.patch<Directory>(`${this.API_URL}/${id}/ops/rename`, {
+      name,
+    });
+  }
+
+  share(id: string, type: string, userEmail: string) {
+    return this.http.patch<Directory>(`${this.API_URL}/${id}/ops/share`, {
+      type,
+      userEmail,
+    });
   }
 }
