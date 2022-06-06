@@ -38,15 +38,15 @@ export class RefreshTokenStrategyService extends PassportStrategy(
       return done(new UnauthorizedException(), null);
     }
 
-    const user = await this.jwtService.validateToken(
-      this.jwtService.decrypt(tokenString),
-    );
+    const decryptedToken = this.jwtService.decrypt(tokenString);
+
+    const user = await this.jwtService.validateToken(decryptedToken);
     if (user == null) {
       return done(new UnauthorizedException(), null);
     }
 
     const refreshToken = await this.tokenRepository.findOne({
-      token: this.jwtService.decrypt(tokenString),
+      token: decryptedToken,
       type: "refresh",
       user: user,
     });
