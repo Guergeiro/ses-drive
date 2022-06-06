@@ -28,7 +28,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
 
   breadcrumb = [];
 
-  directory: Directory;
+  directory: Directory | Partial<Directory>;
   curPath: string;
   base: string;
   title: string;
@@ -81,7 +81,18 @@ export class MyDriveComponent implements OnInit, OnDestroy {
       .getByPath(path)
       .pipe(
         tap((res) => {
-          this.directory = res;
+          if (Array.isArray(res)) {
+            this.directory = {
+              fullpath: this.base,
+              folders: res,
+              files: [],
+              viewers: [],
+              editors: [],
+            };
+            res.fullpath = `/shared/${sessionStorage.getItem('user_email')}`;
+          } else {
+            this.directory = res;
+          }
           this.curPath = res.fullpath;
           this.handleBreadcumb();
         }),

@@ -6,6 +6,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'hard-drive-outline',
     link: '/pages/my-drive',
     home: true,
+    expanded: true,
     children: [
       {
         title: 'Private',
@@ -18,5 +19,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/my-drive/public',
       },
     ],
+  },
+  {
+    title: 'Shared with me',
+    icon: 'people-outline',
+    link: '/pages/my-drive/shared',
   },
 ];

@@ -17,6 +17,11 @@ export class DirectoriesService {
       params = params.append('path', path);
     }
 
+    if (path === '/') {
+      params = params.delete('path');
+      params = params.append('shared', true);
+    }
+
     return this.http.get<Directory>(this.API_URL, { params });
   }
 
