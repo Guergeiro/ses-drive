@@ -212,6 +212,10 @@ export class FolderComponent implements OnInit, OnDestroy {
   }
 
   open() {
+    const id = sessionStorage.getItem('user_id');
+    if (!this.folder.editors.includes(id) && this.folder.owner !== id) {
+      return false;
+    }
     this.contextMenu.show();
     return false;
   }
