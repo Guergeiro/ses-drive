@@ -64,7 +64,20 @@ import { User } from "./user.entity";
 })
 @Filter({
   name: "CREATE",
-  cond: ({ user }) => ({ owner: user }),
+  cond: ({ user }) => ({
+    $or: [
+      {
+        owner: user,
+      },
+      {
+        editors: {
+          $elemMatch: {
+            $eq: user,
+          },
+        },
+      },
+    ],
+  }),
 })
 @Filter({
   name: "DELETE",
