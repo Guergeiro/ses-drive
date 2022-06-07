@@ -10,23 +10,22 @@ import { ReCaptchaV3Service } from 'ngx-captcha';
 import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'ngx-login',
-  templateUrl: './login.component.html',
+  selector: 'ngx-register',
+  templateUrl: './register.component.html',
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
   redirectDelay: number = 0;
   showMessages: any = {};
   strategy: string = '';
 
+  submitted = false;
   errors: string[] = [];
   messages: string[] = [];
   user: any = {};
-  submitted: boolean = false;
-  rememberMe = false;
 
   siteKey: string;
   recaptchaToken: string;
-  recaptchaAction = 'signin';
+  recaptchaAction = 'signout';
 
   constructor(
     private readonly service: NbAuthService,
@@ -35,19 +34,17 @@ export class LoginComponent implements OnInit {
     private readonly router: Router,
     private readonly reCaptchaV3Service: ReCaptchaV3Service,
   ) {
-    this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
-    this.showMessages = this.getConfigValue('forms.login.showMessages');
-    this.strategy = this.getConfigValue('forms.login.strategy');
-    this.rememberMe = this.getConfigValue('forms.login.rememberMe');
+    this.redirectDelay = this.getConfigValue('forms.register.redirectDelay');
+    this.showMessages = this.getConfigValue('forms.register.showMessages');
+    this.strategy = this.getConfigValue('forms.register.strategy');
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.siteKey = environment.RECAPTHA_KEY;
   }
 
-  login(): void {
-    this.errors = [];
-    this.messages = [];
+  register(): void {
+    this.errors = this.messages = [];
     this.submitted = true;
 
     this.reCaptchaV3Service.execute(
@@ -63,10 +60,9 @@ export class LoginComponent implements OnInit {
         };
 
         this.service
-          .authenticate(this.strategy, obj)
+          .register(this.strategy, obj)
           .subscribe((result: NbAuthResult) => {
             this.submitted = false;
-
             if (result.isSuccess()) {
               this.messages = result.getMessages();
             } else {

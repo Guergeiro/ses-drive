@@ -13,9 +13,10 @@ import {
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgxCaptchaModule } from 'ngx-captcha';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, RegisterComponent],
   imports: [
     CommonModule,
     NbLayoutModule,
