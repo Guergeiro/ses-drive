@@ -12,4 +12,5 @@ export const environment = {
   production: false,
   API_URL_PREFIX: 'http://localhost:3000/api/v0',
   BASE_URL: 'http://localhost:3000',
+  RECAPTHA_KEY: '6Ldyo5kfAAAAABbv_KuNgDX28efrIlyB0svl-J9k',
 };
