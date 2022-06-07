@@ -57,7 +57,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
       this.getDirectories();
     });
 
-    this.nbMenuService
+    const subs = this.nbMenuService
       .onItemClick()
       .pipe(
         filter(({ tag }) => tag === 'my-context-menu'),
@@ -73,6 +73,8 @@ export class MyDriveComponent implements OnInit, OnDestroy {
           this.createFolder();
         }
       });
+
+    this.subscriptions.push(subs);
   }
 
   getDirectories(path: string = this.base) {
@@ -178,6 +180,9 @@ export class MyDriveComponent implements OnInit, OnDestroy {
   }
 
   getPath(index: number) {
+    if (this.title === 'Shared' && index === 0) {
+      return '/';
+    }
     return '/' + this.breadcrumb.slice(0, index + 1).join('/');
   }
 
