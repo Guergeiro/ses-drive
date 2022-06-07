@@ -37,3 +37,27 @@
     </div>
   </nb-card-body>
 </nb-card>
+
+<nb-card [nbSpinner]="loadingPassword" nbSpinnerStatus="primary">
+  <nb-card-header class="d-flex align-items-center justify-content-between">
+    Change Password
+
+    <div class="d-flex align-items-center">
+      <button nbButton status="primary" (click)="changePassword(password, confirmPassword)">
+        Save
+      </button>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-12">
+        <h4 class="label">Password</h4>
+        <input [(ngModel)]="password" type="password" nbInput fullWidth>
+      </div>
+      <div class="col-12 mt-2">
+        <h4 class="label">Confirm Password</h4>
+        <input [(ngModel)]="confirmPassword" type="password" nbInput fullWidth>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

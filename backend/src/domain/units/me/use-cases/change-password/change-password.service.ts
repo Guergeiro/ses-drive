@@ -1,11 +1,11 @@
 import { User } from "@entities/user.entity";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
-import { Injectable } from "@nestjs/common";
-import { randomBytes } from "crypto";
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { ChangePasswordDto } from "./change-password.dto";
 
 @Injectable()
-export class GenerateApiKeyService {
+export class ChangePasswordService {
   private readonly userRepository: EntityRepository<User>;
 
   public constructor(
@@ -14,8 +14,14 @@ export class GenerateApiKeyService {
     this.userRepository = userRepository;
   }
 
-  public async execute(user: User) {
-    user.apiKey = randomBytes(20).toString("hex");
+  public async execute(
+    { password, confirmPassword }: ChangePasswordDto,
+    user: User,
+  ) {
+    if (password !== confirmPassword) {
+      throw new BadRequestException();
+    }
+    user.password = password;
 
     await this.userRepository.persistAndFlush(user);
   }
