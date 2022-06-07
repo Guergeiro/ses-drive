@@ -7,6 +7,7 @@ import {
   NbSpinnerModule,
   NbFormFieldModule,
   NbIconModule,
+  NbSelectModule,
 } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
@@ -21,6 +22,7 @@ import { RenameDialogComponent } from '../components/dialogs/rename-dialog/renam
 import { AddFileDialogComponent } from '../components/dialogs/add-file-dialog/add-file-dialog.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { ProfileComponent } from './profile/profile.component';
+import { ShareDialogComponent } from '../components/dialogs/share-dialog/share-dialog.component';
 
 @NgModule({
   imports: [
@@ -37,6 +39,7 @@ import { ProfileComponent } from './profile/profile.component';
     NbSpinnerModule,
     NbFormFieldModule,
     NbIconModule,
+    NbSelectModule,
   ],
   declarations: [
     PagesComponent,
@@ -45,12 +48,14 @@ import { ProfileComponent } from './profile/profile.component';
     YesOrNoDialogComponent,
     RenameDialogComponent,
     ProfileComponent,
+    ShareDialogComponent,
   ],
   entryComponents: [
     AddFileDialogComponent,
     AddFolderDialogComponent,
     YesOrNoDialogComponent,
     RenameDialogComponent,
+    ShareDialogComponent,
   ],
 })
 export class PagesModule {}

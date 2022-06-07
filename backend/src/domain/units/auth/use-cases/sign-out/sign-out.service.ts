@@ -18,14 +18,16 @@ export class SignOutService {
   }
 
   public async execute(tokenString?: string) {
-    const user = await this.jwtService.validateToken(tokenString);
+    const decryptedToken = this.jwtService.decrypt(tokenString);
+
+    const user = await this.jwtService.validateToken(decryptedToken);
 
     if (user == null) {
       throw new UnauthorizedException();
     }
 
     const token = await this.tokenRepository.findOne({
-      token: tokenString,
+      token: decryptedToken,
       type: "refresh",
       user: user,
     });

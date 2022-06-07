@@ -1,6 +1,6 @@
 import { Directory } from "@entities/directory.entity";
 import { User } from "@entities/user.entity";
-import { FilterQuery, FindOptions } from "@mikro-orm/core";
+import { FindOptions } from "@mikro-orm/core";
 import { EntityRepository } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
@@ -17,7 +17,18 @@ export class GetDirectoriesService {
     this.directoryRepository = directoryRepository;
   }
 
-  public async execute({ path, name, shared }: GetDirectoriesDto, user: User) {
+  public async execute({ shared, ...rest }: GetDirectoriesDto, user: User) {
+    console.log(shared);
+    if (shared === true) {
+      return await this.getSharedDirectories(rest, user);
+    }
+    return await this.getPrivateDirectories(rest, user);
+  }
+
+  private async getSharedDirectories(
+    { path, name }: Omit<GetDirectoriesDto, "shared">,
+    user: User,
+  ) {
     const directoryFilters: FindOptions<Directory>["filters"] = {
       READ: {
         user: user,
@@ -37,21 +48,51 @@ export class GetDirectoriesService {
         name: name,
       };
     }
+    const readDirectories = await this.directoryRepository.findAll({
+      filters: directoryFilters,
+    });
 
-    if (shared === true) {
-      const filterQuery: FilterQuery<Directory> = {
-        owner: {
-          $ne: user,
+    const directories = await this.directoryRepository.find(
+      {
+        id: {
+          $in: readDirectories.map((dir) => dir.id),
         },
+        parent: {
+          $nin: readDirectories.map((dir) => dir.id),
+        },
+        owner: {
+          $ne: user
+        }
+      },
+      { populate: ["folders", "files"] },
+    );
+
+    return directories;
+  }
+
+  private async getPrivateDirectories(
+    { path, name }: Omit<GetDirectoriesDto, "shared">,
+    user: User,
+  ) {
+    const directoryFilters: FindOptions<Directory>["filters"] = {
+      READ: {
+        user: user,
+      },
+      path: {
+        path: `/private/${user.email}`,
+      },
+    };
+
+    if (path != null) {
+      directoryFilters.path = {
+        path: path,
       };
-      const directories = await this.directoryRepository.find(filterQuery, {
-        populate: ["folders", "files"],
-        filters: directoryFilters,
-      });
-
-      return directories;
     }
-
+    if (name != null) {
+      directoryFilters.name = {
+        name: name,
+      };
+    }
     return await this.directoryRepository.findOneOrFail(
       {},
       {

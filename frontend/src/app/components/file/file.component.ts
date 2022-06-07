@@ -22,6 +22,7 @@ import { File } from '../../types/File';
 import { ViewChild } from '@angular/core';
 import { RenameDialogComponent } from '../dialogs/rename-dialog/rename-dialog.component';
 import { YesOrNoDialogComponent } from '../dialogs/yes-or-no-dialog/yes-or-no-dialog.component';
+import { ShareDialogComponent } from '../dialogs/share-dialog/share-dialog.component';
 
 @Component({
   selector: 'ngx-file',
@@ -34,6 +35,7 @@ export class FileComponent implements OnInit, OnDestroy {
 
   menu = [
     { title: 'Rename', icon: 'edit-outline' },
+    { title: 'Share', icon: 'share-outline' },
     { title: 'Delete', icon: 'trash-outline' },
   ];
 
@@ -61,6 +63,11 @@ export class FileComponent implements OnInit, OnDestroy {
       .subscribe((title) => {
         if (title === 'Rename') {
           this.rename();
+          return;
+        }
+
+        if (title === 'Share') {
+          this.share();
           return;
         }
 
@@ -178,6 +185,58 @@ export class FileComponent implements OnInit, OnDestroy {
           )
           .subscribe();
 
+        this.subscriptions.push(sub);
+      });
+  }
+
+  share() {
+    this.dialogService
+      .open(ShareDialogComponent, {
+        closeOnBackdropClick: false,
+        context: {
+          title: 'Share File',
+          current: this.file.name,
+        },
+      })
+      .onClose.subscribe((res) => {
+        if (res == null) {
+          return;
+        }
+
+        this.loading = true;
+        const sub = this.filesService
+          .share(this.file.id, res.permission, res.email)
+          .pipe(
+            tap(() => {
+              this.newRefreshParent.emit(
+                this.buildParentPath(this.file.fullpath),
+              );
+
+              this.toastService.show(
+                `You changed the permissions with success!`,
+                'Success',
+                {
+                  status: 'success',
+                },
+              );
+            }),
+            finalize(() => {
+              this.loading = false;
+              this.cdr.markForCheck();
+            }),
+            catchError((err) => {
+              this.toastService.show(
+                'Error while sharing, try again later.',
+                'Error',
+                {
+                  status: 'danger',
+                },
+              );
+              this.handleError.handleError(err);
+              return of(null);
+            }),
+          )
+          .subscribe();
         this.subscriptions.push(sub);
       });
   }

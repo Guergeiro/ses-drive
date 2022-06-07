@@ -18,6 +18,14 @@ const routes: Routes = [
       title: 'Public',
     },
   },
+  {
+    path: 'shared',
+    component: MyDriveComponent,
+    data: {
+      base: '/',
+      title: 'Shared',
+    },
+  },
 ];
 
 @NgModule({

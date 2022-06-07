@@ -1,6 +1,7 @@
 import { Directory } from "@entities/directory.entity";
 import { File } from "@entities/file.entity";
 import { User } from "@entities/user.entity";
+import { FindOptions } from "@mikro-orm/core";
 import { EntityRepository, ObjectId } from "@mikro-orm/mongodb";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable, UnsupportedMediaTypeException } from "@nestjs/common";
@@ -28,12 +29,19 @@ export class CreateFileService {
       throw new UnsupportedMediaTypeException();
     }
     const filesArray: Array<S3RequiredFile> = [];
+    const directoryFilters: FindOptions<Directory>["filters"] = {
+      CREATE: {
+        user: user,
+      },
+    };
 
     for (const { fieldname, mimetype, originalname, buffer } of files) {
-      const directory = await this.directoryRepository.findOneOrFail({
-        fullpath: fieldname,
-        owner: user,
-      });
+      const directory = await this.directoryRepository.findOneOrFail(
+        {
+          fullpath: fieldname,
+        },
+        { filters: directoryFilters },
+      );
       const fileObj = this.filesRepository.create({
         _id: new ObjectId(),
         fullpath: `${directory.fullpath}/${originalname}`,

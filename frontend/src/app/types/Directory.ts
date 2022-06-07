@@ -8,4 +8,6 @@ export type Directory = {
   parent: string;
   updatedAt: Date;
   createdAt: Date;
+  viewers: string[];
+  editors: string[];
 };

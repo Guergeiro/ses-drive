@@ -1,0 +1,20 @@
+<nb-card style="width: 640px;" class="p-2">
+  <nb-card-header>{{ title }}</nb-card-header>
+  <nb-card-body>
+    <h4 class="label">By doing this you will share:</h4>
+    <div class="alert alert-secondary p-2">
+      {{current}}
+    </div>
+    <h4 class="label">Email:</h4>
+    <input #email nbInput placeholder="Email" fullWidth>
+
+    <h4 class="label mt-2">Permission:</h4>
+    <nb-select placeholder="Select Permission" fullWidth #permission>
+      <nb-option [value]="permission.value" *ngFor="let permission of this.permissions">{{permission.name}}</nb-option>
+    </nb-select>
+  </nb-card-body>
+  <nb-card-footer class="d-flex justify-content-center align-items-center">
+    <button class="cancel mr-2" nbButton status="basic" (click)="cancel()">Cancel</button>
+    <button nbButton status="primary" (click)="submit(email.value, permission.selected)">Save</button>
+  </nb-card-footer>
+</nb-card>

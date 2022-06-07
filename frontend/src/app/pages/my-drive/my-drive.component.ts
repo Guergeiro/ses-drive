@@ -13,6 +13,9 @@ import { Directory } from '../../types/Directory';
 import { AddFolderDialogComponent } from '../../components/dialogs/add-folder-dialog/add-folder-dialog.component';
 import { AddFileDialogComponent } from '../../components/dialogs/add-file-dialog/add-file-dialog.component';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { FilesService } from '../../services/files/files.service';
+import { File } from '../../types/File';
 
 @Component({
   selector: 'ngx-my-drive',
@@ -27,7 +30,9 @@ export class MyDriveComponent implements OnInit, OnDestroy {
 
   breadcrumb = [];
 
-  directory: Directory;
+  directory: Directory | Partial<Directory>;
+
+  sharedFiles: File[];
   curPath: string;
   base: string;
   title: string;
@@ -38,6 +43,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
   constructor(
     private readonly nbMenuService: NbMenuService,
     private readonly directoriesService: DirectoriesService,
+    private readonly filesService: FilesService,
     private readonly cdr: ChangeDetectorRef,
     private readonly handleError: ErrorHandler,
     private readonly dialogService: NbDialogService,
@@ -56,7 +62,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
       this.getDirectories();
     });
 
-    this.nbMenuService
+    const subs = this.nbMenuService
       .onItemClick()
       .pipe(
         filter(({ tag }) => tag === 'my-context-menu'),
@@ -72,6 +78,8 @@ export class MyDriveComponent implements OnInit, OnDestroy {
           this.createFolder();
         }
       });
+
+    this.subscriptions.push(subs);
   }
 
   getDirectories(path: string = this.base) {
@@ -80,9 +88,43 @@ export class MyDriveComponent implements OnInit, OnDestroy {
       .getByPath(path)
       .pipe(
         tap((res) => {
-          this.directory = res;
+          if (Array.isArray(res) && this.title === 'Shared') {
+            this.directory = {
+              fullpath: this.base,
+              folders: res,
+              files: [],
+              viewers: [],
+              editors: [],
+            };
+            res.fullpath = `/shared/${sessionStorage.getItem('user_email')}`;
+            this.getSharedFiles();
+          } else {
+            this.directory = res;
+          }
           this.curPath = res.fullpath;
           this.handleBreadcumb();
+        }),
+        finalize(() => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        }),
+        catchError((err) => {
+          this.handleError.handleError(err);
+          return of(null);
+        }),
+      )
+      .subscribe();
+
+    this.subscriptions.push(sub);
+  }
+
+  getSharedFiles() {
+    this.loading = true;
+    const sub = this.filesService
+      .getSharedFiles()
+      .pipe(
+        tap((res) => {
+          this.sharedFiles = res;
         }),
         finalize(() => {
           this.loading = false;
@@ -144,12 +186,31 @@ export class MyDriveComponent implements OnInit, OnDestroy {
       });
   }
 
+  serve() {
+    const email = sessionStorage.getItem('user_email');
+
+    window.open(`${environment.BASE_URL}/public/${email}`, '_blank');
+  }
+
   handleBreadcumb() {
     const auxPath = this.curPath.split('/').slice(1);
     this.breadcrumb = [auxPath.slice(0, 2).join('/'), ...auxPath.slice(2)];
   }
 
+  showButton() {
+    const id = sessionStorage.getItem('user_id');
+
+    if (this.directory?.editors?.includes(id) === false && this.base === '/') {
+      return false;
+    }
+
+    return true;
+  }
+
   getPath(index: number) {
+    if (this.title === 'Shared' && index === 0) {
+      return '/';
+    }
     return '/' + this.breadcrumb.slice(0, index + 1).join('/');
   }
 

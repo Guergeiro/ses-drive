@@ -6,4 +6,6 @@ export type Folder = {
   parent: string;
   updatedAt: Date;
   createdAt: Date;
+  viewers: string[];
+  editors: string[];
 };

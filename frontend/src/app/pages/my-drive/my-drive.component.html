@@ -3,14 +3,16 @@
     My Drive - {{ this.title }}
 
     <div class="d-flex align-items-center">
-      <button nbButton outline status="info" class="mr-2" *ngIf="this.title === 'Public'">
+      <button nbButton outline status="info" class="mr-2" *ngIf="this.title === 'Public'" (click)="this.serve()">
         Serve<nb-icon icon="globe-outline"></nb-icon>
       </button>
       <button
         nbButton
         status="primary"
         [nbContextMenu]="items"
-        nbContextMenuTag="my-context-menu">
+        nbContextMenuTag="my-context-menu"
+        *ngIf="this.showButton()"
+        >
         New<nb-icon icon="plus"></nb-icon>
       </button>
     </div>
@@ -59,6 +61,33 @@
           <div class="col-12" *ngIf="this.directory.files.length === 0">
             <p class="paragraph m-0 text-center">
               No files yet.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nb-card-body>
+</nb-card>
+
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="primary" *ngIf="this.title === 'Shared'">
+  <nb-card-header class="d-flex align-items-center justify-content-between">
+    All Shared Files
+  </nb-card-header>
+
+  <nb-card-body>
+
+    <div class="row mt-3">
+      <div class="col-12">
+        <h4 class="label">Files</h4>
+
+        <div class="row" *ngIf="this.sharedFiles">
+          <div class="col-sm-6 col-md-3 mb-2" *ngFor="let file of this.sharedFiles;">
+            <ngx-file [file]="file" (newRefreshParent)="getDirectories($event)"></ngx-file>
+          </div>
+          <div class="col-12" *ngIf="this.sharedFiles.length === 0">
+            <p class="paragraph m-0 text-center">
+              No shared files with you.
             </p>
           </div>
         </div>

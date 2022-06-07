@@ -17,6 +17,11 @@ export class DirectoriesService {
       params = params.append('path', path);
     }
 
+    if (path === '/') {
+      params = params.delete('path');
+      params = params.append('shared', true);
+    }
+
     return this.http.get<Directory>(this.API_URL, { params });
   }
 
@@ -29,11 +34,15 @@ export class DirectoriesService {
   }
 
   rename(id: string, name: string) {
-    return this.http.patch<Directory>(
-      `${this.API_URL}/${id}/ops/rename`,
-      {
-        name,
-      },
-    );
+    return this.http.patch<Directory>(`${this.API_URL}/${id}/ops/rename`, {
+      name,
+    });
+  }
+
+  share(id: string, type: string, userEmail: string) {
+    return this.http.patch<Directory>(`${this.API_URL}/${id}/ops/share`, {
+      type,
+      userEmail,
+    });
   }
 }

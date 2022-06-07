@@ -11,4 +11,5 @@
 export const environment = {
   production: false,
   API_URL_PREFIX: 'http://localhost:3000/api/v0',
+  BASE_URL: 'http://localhost:3000',
 };
