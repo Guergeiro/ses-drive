@@ -12,10 +12,7 @@ import {
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { PagesRoutingModule } from './pages-routing.module';
-import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { AddFolderDialogComponent } from '../components/dialogs/add-folder-dialog/add-folder-dialog.component';
 import { YesOrNoDialogComponent } from '../components/dialogs/yes-or-no-dialog/yes-or-no-dialog.component';
 import { RenameDialogComponent } from '../components/dialogs/rename-dialog/rename-dialog.component';
@@ -25,15 +22,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { ShareDialogComponent } from '../components/dialogs/share-dialog/share-dialog.component';
 import { NgxCaptchaModule } from 'ngx-captcha';
 import { FormsModule } from '@angular/forms';
+import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 
 @NgModule({
   imports: [
     PagesRoutingModule,
     ThemeModule,
     NbMenuModule,
-    DashboardModule,
-    ECommerceModule,
-    MiscellaneousModule,
     NbCardModule,
     NbButtonModule,
     NbInputModule,
@@ -53,6 +48,7 @@ import { FormsModule } from '@angular/forms';
     RenameDialogComponent,
     ProfileComponent,
     ShareDialogComponent,
+    NotFoundComponent,
   ],
   entryComponents: [
     AddFileDialogComponent,
