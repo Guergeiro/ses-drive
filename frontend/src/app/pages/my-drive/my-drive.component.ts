@@ -167,6 +167,16 @@ export class MyDriveComponent implements OnInit, OnDestroy {
     this.breadcrumb = [auxPath.slice(0, 2).join('/'), ...auxPath.slice(2)];
   }
 
+  showButton() {
+    const id = sessionStorage.getItem('user_id');
+
+    if (this.directory?.editors?.includes(id) === false && this.base === '/') {
+      return false;
+    }
+
+    return true;
+  }
+
   getPath(index: number) {
     return '/' + this.breadcrumb.slice(0, index + 1).join('/');
   }

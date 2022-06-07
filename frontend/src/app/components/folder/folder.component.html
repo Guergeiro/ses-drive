@@ -7,6 +7,7 @@
   (contextmenu)="open()"
   [nbSpinner]="loading"
   nbSpinnerStatus="primary">
-  <nb-icon icon="folder" class="mr-2"></nb-icon>
+  <nb-icon [icon]="this.folder.editors.length === 0 && this.folder.viewers.length === 0 ? 'folder' : 'people'" class="mr-2"></nb-icon>
   <p class="paragraph m-0">{{ this.folder.name }}</p>
+  <nb-icon icon="edit" *ngIf="this.folder.editors.length === 0" class="ml-2"></nb-icon>
 </div>

@@ -10,7 +10,9 @@
         nbButton
         status="primary"
         [nbContextMenu]="items"
-        nbContextMenuTag="my-context-menu">
+        nbContextMenuTag="my-context-menu"
+        *ngIf="this.showButton()"
+        >
         New<nb-icon icon="plus"></nb-icon>
       </button>
     </div>
