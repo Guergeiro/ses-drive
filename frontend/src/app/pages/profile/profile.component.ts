@@ -10,6 +10,8 @@ import { MeService } from '../../services/me/me.service';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { OnDestroy } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
+import { ReCaptchaV3Service } from 'ngx-captcha';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'ngx-profile',
@@ -19,7 +21,15 @@ import { NbToastrService } from '@nebular/theme';
 export class ProfileComponent implements OnInit, OnDestroy {
   user: User;
 
+  password: string;
+  confirmPassword: string;
+
   loading = false;
+  loadingPassword = false;
+
+  siteKey: string;
+  recaptchaToken: string;
+  recaptchaAction = 'changepassword';
 
   subscriptions: Subscription[] = [];
 
@@ -28,9 +38,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private readonly handleError: ErrorHandler,
     private readonly cdr: ChangeDetectorRef,
     private readonly toastService: NbToastrService,
+    private readonly reCaptchaV3Service: ReCaptchaV3Service,
   ) {}
 
   ngOnInit(): void {
+    this.siteKey = environment.RECAPTHA_KEY;
     this.getUser();
   }
 
@@ -76,6 +88,46 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.subscriptions.push(sub);
+  }
+
+  changePassword(password: string, confirmPassword: string) {
+    this.loadingPassword = true;
+    this.reCaptchaV3Service.execute(
+      this.siteKey,
+      this.recaptchaAction,
+      (token) => {
+        this.recaptchaToken = token;
+
+        const obj = {
+          password,
+          confirmPassword,
+          recaptchaToken: this.recaptchaToken,
+          recaptchaAction: this.recaptchaAction,
+        };
+
+        const sub = this.meService
+          .changePassword(obj)
+          .pipe(
+            tap(() => {
+              this.showToast('Password update with success!', 'Success');
+            }),
+            finalize(() => {
+              this.password = '';
+              this.confirmPassword = '';
+              this.loadingPassword = false;
+              this.cdr.markForCheck();
+            }),
+            catchError((err) => {
+              this.showToast('Error while updating password!', 'Danger');
+              this.handleError.handleError(err);
+              return of(null);
+            }),
+          )
+          .subscribe();
+
+        this.subscriptions.push(sub);
+      },
+    );
   }
 
   copyAddr(key: string) {

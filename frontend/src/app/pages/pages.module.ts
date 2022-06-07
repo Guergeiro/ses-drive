@@ -23,6 +23,8 @@ import { AddFileDialogComponent } from '../components/dialogs/add-file-dialog/ad
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { ProfileComponent } from './profile/profile.component';
 import { ShareDialogComponent } from '../components/dialogs/share-dialog/share-dialog.component';
+import { NgxCaptchaModule } from 'ngx-captcha';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -40,6 +42,8 @@ import { ShareDialogComponent } from '../components/dialogs/share-dialog/share-d
     NbFormFieldModule,
     NbIconModule,
     NbSelectModule,
+    NgxCaptchaModule,
+    FormsModule,
   ],
   declarations: [
     PagesComponent,
