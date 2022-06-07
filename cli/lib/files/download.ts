@@ -29,7 +29,7 @@ export const download = new Command().description("Download a file")
       const buffer = await res.arrayBuffer();
 
       if (destination == null) {
-        await write(filename, buffer)
+        await write(filename, buffer);
       } else {
         await write(`${destination}/${filename}`, buffer);
       }

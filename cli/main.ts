@@ -20,8 +20,8 @@ async function main() {
       .parse(
         Deno.args,
       );
-  } catch(err) {
-    console.error(err.message)
+  } catch (err) {
+    console.error(err.message);
   }
 }
 

@@ -4,7 +4,7 @@ export type FileSystem = {
   id: string;
   fullpath: string;
   name: string;
-}
+};
 
 export type Directory = FileSystem & {
   parent: Directory;

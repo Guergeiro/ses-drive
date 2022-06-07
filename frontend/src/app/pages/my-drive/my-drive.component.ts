@@ -189,7 +189,7 @@ export class MyDriveComponent implements OnInit, OnDestroy {
   serve() {
     const email = sessionStorage.getItem('user_email');
 
-    window.open(`${environment.BASE_URL}/public/${email}`, '_blank');
+    window.open(`${environment.BASE_URL}/public/${email}/index.html`, '_blank');
   }
 
   handleBreadcumb() {

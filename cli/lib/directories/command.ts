@@ -8,4 +8,4 @@ export const directory = new Command().description("Directory related actions")
   .command("list", list).reset()
   .command("create", create).reset()
   .command("delete", del).reset()
-  .command("rename", rename).reset()
+  .command("rename", rename).reset();

@@ -1,5 +1,5 @@
 import { majorVersion } from "./version.ts";
 
-const baseUrl = "http://0.0.0.0:3000";
+const baseUrl = "https://ses-drive-backend.herokuapp.com";
 
 export const apiurl = `${baseUrl}/api/v${majorVersion}`;

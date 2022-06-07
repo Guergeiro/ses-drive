@@ -14,7 +14,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiTags } from "@nestjs/swagger";
-import { Request } from "express";
+import { CookieOptions, Request } from "express";
 import { RefreshService } from "./use-cases/refresh/refresh.service";
 import { SignInDto } from "./use-cases/sign-in/sign-in.dto";
 import { SignInService } from "./use-cases/sign-in/sign-in.service";
@@ -104,10 +104,11 @@ export class AuthController {
     refreshToken: string,
     expiresAt: Date,
   ) {
-    const cookie = {
+    const cookie: CookieOptions = {
       httpOnly: true,
       expires: expiresAt,
       secure: this.configService.get<string>("NODE_ENV") !== "development",
+      sameSite: "none",
     };
 
     for (const path of this.refreshPaths) {

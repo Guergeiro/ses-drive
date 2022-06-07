@@ -7,11 +7,14 @@ export const del = new Command().description("Deletes a file").arguments(
   "<id:string>",
 ).action(
   // @ts-ignore: `key` is always defined as it's a global option
-async function ({key}: {key: string}, id: string) {
-  const data = await json(await fetch(`${apiurl}/files/${id}`, {
-    headers: headers(key),
-    method: "DELETE",
-  }))
+  async function ({ key }: { key: string }, id: string) {
+    const data = await json(
+      await fetch(`${apiurl}/files/${id}`, {
+        headers: headers(key),
+        method: "DELETE",
+      }),
+    );
 
-  console.log(data.message);
-});
+    console.log(data.message);
+  },
+);

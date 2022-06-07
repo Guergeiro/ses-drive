@@ -18,9 +18,16 @@ export class BaseInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
+
     request = request.clone({
       url: `${this.API_URL_PREFIX}/${request.url}`,
     });
+
+    if (request.url.includes('auth')) {
+      request = request.clone({
+        withCredentials: true,
+      });
+    }
 
     return next.handle(request);
   }

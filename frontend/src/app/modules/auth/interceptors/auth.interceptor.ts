@@ -47,7 +47,7 @@ export class AuthInterceptor implements HttpInterceptor {
               switchMap((token: NbAuthToken) => {
                 const JWT = `Bearer ${token.getValue()}`;
 
-                if (req.url.includes('/api/v0/auth/sign-out')) {
+                if (req.url.includes(`/api/v${environment.VERSION}/auth/sign-out`)) {
                   req = req.clone({
                     body: {},
                     headers: new HttpHeaders().set(
@@ -80,7 +80,7 @@ export class AuthInterceptor implements HttpInterceptor {
               }),
             );
           } else {
-            if (req.url.includes('/api/v0/auth/sign-in')) {
+            if (req.url.includes(`/api/v${environment.VERSION}/auth/sign-in`)) {
               req = req.clone({
                 withCredentials: true,
               });

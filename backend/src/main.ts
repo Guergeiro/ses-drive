@@ -3,7 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as cookieParser from "cookie-parser";
 import * as cors from "cors";
-import helmet from "helmet";
+import * as helmet from "helmet";
 import "reflect-metadata";
 import { AppModule } from "./app.module";
 import { environment } from "./configs/environment";
@@ -19,7 +19,7 @@ async function bootstrap() {
         : ["error", "warn", "log", "debug", "verbose"],
     cors: function (req: Request, callback: any) {
       const config: cors.CorsOptions = { origin: "*" };
-      if (req.url.startsWith(`/${env.host.PREFIX}/auth`)) {
+      if (req.path.startsWith(`/${env.host.PREFIX}/auth`)) {
         if (env.NODE_ENV === "development") {
           config.origin = `http://${env.host.APP_URL}:${env.host.APP_PORT}`;
         } else {

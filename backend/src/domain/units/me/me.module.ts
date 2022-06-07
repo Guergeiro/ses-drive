@@ -3,7 +3,7 @@ import { MikroOrmModule } from "@mikro-orm/nestjs";
 import { Module } from "@nestjs/common";
 import { MeController } from "./me.controller";
 import { GenerateApiKeyService } from "./use-cases/generate-api-key/generate-api-key.service";
-import { ChangePasswordService } from './use-cases/change-password/change-password.service';
+import { ChangePasswordService } from "./use-cases/change-password/change-password.service";
 
 @Module({
   controllers: [MeController],

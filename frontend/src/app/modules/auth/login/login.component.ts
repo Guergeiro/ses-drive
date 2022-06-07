@@ -8,6 +8,8 @@ import {
 } from '@nebular/auth';
 import { ReCaptchaV3Service } from 'ngx-captcha';
 import { environment } from '../../../../environments/environment';
+import { MeService } from '../../../services/me/me.service';
+import { User } from '../../../types/User';
 
 @Component({
   selector: 'ngx-login',
@@ -34,6 +36,7 @@ export class LoginComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly router: Router,
     private readonly reCaptchaV3Service: ReCaptchaV3Service,
+    private readonly meService: MeService,
   ) {
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
     this.showMessages = this.getConfigValue('forms.login.showMessages');
@@ -73,13 +76,21 @@ export class LoginComponent implements OnInit {
               this.errors = result.getErrors();
             }
 
-            const redirect = result.getRedirect();
-            if (redirect) {
-              setTimeout(() => {
-                return this.router.navigateByUrl(redirect);
-              }, this.redirectDelay);
-            }
-            this.cdr.detectChanges();
+            this.meService
+              .me()
+              .pipe()
+              .subscribe((user: User) => {
+                sessionStorage.setItem('user_email', user.email);
+                sessionStorage.setItem('user_id', user.id);
+
+                const redirect = result.getRedirect();
+                if (redirect) {
+                  setTimeout(() => {
+                    return this.router.navigateByUrl(redirect);
+                  }, this.redirectDelay);
+                }
+                this.cdr.detectChanges();
+              });
           });
       },
     );

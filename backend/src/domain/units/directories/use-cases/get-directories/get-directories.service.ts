@@ -61,8 +61,8 @@ export class GetDirectoriesService {
           $nin: readDirectories.map((dir) => dir.id),
         },
         owner: {
-          $ne: user
-        }
+          $ne: user,
+        },
       },
       { populate: ["folders", "files"] },
     );
