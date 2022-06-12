@@ -12,6 +12,11 @@
 - [Conclusion](#conclusion)
 
 # Introduction
+This project is implemented as part of the Security in Software Engineering (SES) course. It is proposed that the group create and implement an internal file-sharing service called SES-Drive.
+
+Considering current standards, the service must be available via a modern website. But in order to pay attention to every actor, a well-documented REST API and a CLI tool for expert users are required.
+
+Regarding the project's scope, we had to focus on the interface, authentication, and access control. Since this is a security project, its scope focuses heavily on the reliability and security of the service.
 
 # Architecture
 
@@ -281,3 +286,9 @@ communication between the client and the S3 always pass through the server.
 ![personal-page](./.assets/ses-drive-personal-age.drawio.png)
 
 # Conclusion
+
+Implementing a complete service like this is hard in every aspect, from having a hard project theme, to time constraints, to have to take into consideration security, design and reliability contraints for three diferent use cases was a challenge.
+
+In the end we reached a robust solution, and ticked every requirement and request but reducing the scope or time contraints the solution could be improved and more security contraints could be addressed.
+
+Taking everything into consideration was a hard challenge but completed with success, and with future work and implementing more functionalities it could be a in house Google Drive for the people don't trust other services with their data.
